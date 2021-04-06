@@ -1,0 +1,23 @@
+{
+  "name": "hcdev.ru",
+  "version": "1.0.0",
+  "description": "Site with web documentations",
+  "dependencies": {},
+  "devDependencies": {
+    "@prettier/plugin-xml": "^0.12.0",
+    "prettier": "^2.1.2"
+  },
+  "scripts": {
+    "build": "mkdocs build",
+    "serve": "mkdocs serve --dirtyreload",
+	"upgrade": "pip3 install --upgrade -r ./requirements.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xsltdev/hcdev.ru.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xsltdev/hcdev.ru/issues"
+  },
+  "homepage": "https://hcdev.ru/"
+}

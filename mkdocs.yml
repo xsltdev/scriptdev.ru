@@ -1,0 +1,76 @@
+site_name: Справочник HTML и CSS
+site_url: https://hcdev.ru/
+site_description: Справочник web-разработчика с примерами кода - HTML, CSS
+site_author: hcdev.ru
+copyright: (C) 2021, Справочник разработчика Javascript с примерами кода
+
+repo_name: 'Справочник на Github'
+repo_url: 'https://github.com/xsltdev/scriptdev.ru'
+
+theme:
+    name: material
+    custom_dir: overrides
+    # name: null
+    # custom_dir: 'theme/material'
+    palette:
+        scheme: slate
+        primary: yellow
+        accent: yellow
+    language: ru
+    features:
+        - navigation.tabs
+        - navigation.tracking
+        - navigation.instant
+    favicon: js.svg
+    logo: js.svg
+
+extra:
+    social:
+        - icon: fontawesome/brands/html5
+          link: 'https://hcdev.ru/'
+          name: HTML and CSS docs
+        - icon: fontawesome/brands/js
+          link: 'https://scriptdev.ru/'
+          name: Javascript
+        - icon: fontawesome/brands/angular
+          link: 'https://angdev.ru/'
+          name: Angular docs
+        - icon: fontawesome/brands/react
+          link: 'https://reactdev.ru/'
+          name: React docs
+        - icon: fontawesome/brands/node-js
+          link: 'https://nodejsdev.ru/'
+          name: Node.js docs
+        - icon: fontawesome/solid/code
+          link: 'https://xsltdev.ru/'
+          name: XSLT docs
+
+#google_analytics:
+#    - UA-34215161-1
+#    - auto
+
+markdown_extensions:
+    - admonition
+    - codehilite:
+          guess_lang: false
+          linenums: false
+    - toc:
+          permalink: true
+    - pymdownx.extra
+    - pymdownx.details
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
+    - pymdownx.tabbed
+    - pymdownx.superfences
+
+plugins:
+    - search:
+          lang:
+              - ru
+              - en
+    - awesome-pages
+    - section-index
+
+extra_css:
+    - '/assets/stylesheets/styles.css'
