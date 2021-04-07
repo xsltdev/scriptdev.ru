@@ -12,10 +12,23 @@ theme:
     custom_dir: overrides
     # name: null
     # custom_dir: 'theme/material'
+    # Don't include MkDocs' JavaScript
+    include_search_page: false
+    search_index_only: true
+
     palette:
-        scheme: slate
-        primary: yellow
-        accent: yellow
+        - scheme: default
+          primary: yellow
+          accent: yellow
+          toggle:
+              icon: material/toggle-switch
+              name: Switch to light mode
+        - scheme: slate
+          primary: yellow
+          accent: yellow
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Switch to dark mode
     language: ru
     features:
         - navigation.tabs
