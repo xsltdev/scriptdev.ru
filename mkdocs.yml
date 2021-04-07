@@ -1,7 +1,7 @@
-site_name: Справочник HTML и CSS
-site_url: https://hcdev.ru/
-site_description: Справочник web-разработчика с примерами кода - HTML, CSS
-site_author: hcdev.ru
+site_name: Javascript
+site_url: https://scriptdev.ru/
+site_description: Справочник Javascript-разработчика с примерами кода
+site_author: scriptdev.ru
 copyright: (C) 2021, Справочник разработчика Javascript с примерами кода
 
 repo_name: 'Справочник на Github'
@@ -17,18 +17,18 @@ theme:
     search_index_only: true
 
     palette:
-        - scheme: default
-          primary: yellow
-          accent: yellow
-          toggle:
-              icon: material/toggle-switch
-              name: Switch to light mode
         - scheme: slate
           primary: yellow
           accent: yellow
           toggle:
               icon: material/toggle-switch-off-outline
               name: Switch to dark mode
+        - scheme: default
+          primary: white
+          accent: amber
+          toggle:
+              icon: material/toggle-switch
+              name: Switch to light mode
     language: ru
     features:
         - navigation.tabs
