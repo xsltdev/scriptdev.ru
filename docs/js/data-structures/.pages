@@ -1,0 +1,13 @@
+title: Структуры данных
+nav:
+    - index.md
+    - linked-list.md
+    - stack.md
+    - queue.md
+    - set.md
+    - map.md
+    - hash.md
+    - btree.md
+    - ptree.md
+    - heap.md
+    - graph.md
