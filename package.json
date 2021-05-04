@@ -1,5 +1,5 @@
 {
-  "name": "hcdev.ru",
+  "name": "scriptdev.ru",
   "version": "1.0.0",
   "description": "Site with web documentations",
   "devDependencies": {
@@ -13,10 +13,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xsltdev/hcdev.ru.git"
+    "url": "git+https://github.com/xsltdev/scriptdev.ru.git"
   },
   "bugs": {
-    "url": "https://github.com/xsltdev/hcdev.ru/issues"
+    "url": "https://github.com/xsltdev/scriptdev.ru/issues"
   },
-  "homepage": "https://hcdev.ru/"
+  "homepage": "https://scriptdev.ru/"
 }
