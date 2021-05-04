@@ -12,7 +12,7 @@ hide:
 <div class="cell" markdown="1">
 
 [![JS](js.svg){: style="height:16px;width:16px;vertical-align:middle;"} Javascript](/js/)
-: Справочник по языку программирования Javascript с примерами кода.<br />[Углубленный JS](/js/garden/index.md) &bullet; [Структуры данных](/js/data-structures/index.md)
+: Справочник по языку программирования Javascript с примерами кода.<br />[Углубленный JS](/js/garden/) &bullet; [Структуры данных](/js/data-structures/)
 
 [![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Typescript](/ts/)
 : Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
