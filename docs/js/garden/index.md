@@ -1,5 +1,5 @@
 ---
-description: Справочник по языку программирования Javascript с примерами кода
+description: Углубленный Javascript
 ---
 
 # Углубленный Javascript
