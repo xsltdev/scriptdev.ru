@@ -17,17 +17,8 @@ theme:
     search_index_only: true
 
     palette:
-        - primary: yellow
-          accent: yellow
-          toggle:
-              icon: material/toggle-switch-off-outline
-              name: Switch to dark mode
-        - scheme: default
-          primary: white
-          accent: amber
-          toggle:
-              icon: material/toggle-switch
-              name: Switch to light mode
+        primary: white
+        accent: amber
     language: ru
     features:
         - navigation.tabs
