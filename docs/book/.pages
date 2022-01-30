@@ -11,10 +11,9 @@ nav:
     - types
     - jsx
     - options
-    - errors
+    - errors.md
     - npm.md
-    - testing
-    - tools
+    - tools.md
     - tips
     - styleguide.md
 

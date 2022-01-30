@@ -4,10 +4,9 @@
 
 ```js
 try {
-  throw new Error('Случилось что-то плохое');
-}
-catch(e) {
-  console.log(e);
+    throw new Error('Случилось что-то плохое');
+} catch (e) {
+    console.log(e);
 }
 ```
 
@@ -21,7 +20,8 @@ catch(e) {
 
 ```js
 // Вызов консоли с слишком большим количеством параметров
-console.log.apply(console, new Array(1000000000)); // RangeError: Невалидная длина массива
+console.log.apply(console, new Array(1000000000));
+// RangeError: Невалидная длина массива
 ```
 
 ### ReferenceError
@@ -46,7 +46,7 @@ console.log(notValidVar); // ReferenceError: notValidVar не определен
 Создается экземпляр ошибки, которая возникает, когда переменная или параметр имеет недопустимый тип.
 
 ```js
-('1.2').toPrecision(1); // TypeError: '1.2'.toPrecision не является функцией
+'1.2'.toPrecision(1); // TypeError: '1.2'.toPrecision не является функцией
 ```
 
 ### URIError
@@ -63,14 +63,13 @@ decodeURI('%'); // URIError: URI неправильно сформирован
 
 ```js
 try {
-  throw 'Случилось что-то плохое';
-}
-catch(e) {
-  console.log(e);
+    throw 'Случилось что-то плохое';
+} catch (e) {
+    console.log(e);
 }
 ```
 
-*Не делайте так*. Основное преимущество объектов `Error` состоит в том, что автоматически отслеживается где они были созданы и произошли с помощью свойства `stack`.
+_Не делайте так_. Основное преимущество объектов `Error` состоит в том, что автоматически отслеживается где они были созданы и произошли с помощью свойства `stack`.
 
 Необработанные строки приводят к очень болезненной отладке и затрудняют анализ ошибок из логов.
 
@@ -100,11 +99,10 @@ function myFunction (callback: (e?: Error)) {
 
 ```js
 try {
-  const foo = runTask1();
-  const bar = runTask2();
-}
-catch(e) {
-  console.log('Ошибка:', e);
+    const foo = runTask1();
+    const bar = runTask2();
+} catch (e) {
+    console.log('Ошибка:', e);
 }
 ```
 
@@ -116,34 +114,31 @@ catch(e) {
 
 ```js
 try {
-  const foo = runTask1();
-}
-catch(e) {
-  console.log('Ошибка:', e);
+    const foo = runTask1();
+} catch (e) {
+    console.log('Ошибка:', e);
 }
 try {
-  const bar = runTask2();
-}
-catch(e) {
-  console.log('Ошибка:', e);
+    const bar = runTask2();
+} catch (e) {
+    console.log('Ошибка:', e);
 }
 ```
 
 Но теперь, если вам нужно передать что-то из первой задачи во вторую, код становится грязным: (обратите внимание на мутацию `foo`, требующую `let` + явную необходимость описывать ее, потому что это не может быть логически выведено от возврата `runTask1`):
 
 ```ts
-let foo: number; // Обратите внимание на использование `let` и явное описание типа
+let foo: number; // Обратите внимание на использование `let`
+// и явное описание типа
 try {
-  foo = runTask1();
-}
-catch(e) {
-  console.log('Ошибка:', e);
+    foo = runTask1();
+} catch (e) {
+    console.log('Ошибка:', e);
 }
 try {
-  const bar = runTask2(foo);
-}
-catch(e) {
-  console.log('Ошибка:', e);
+    const bar = runTask2(foo);
+} catch (e) {
+    console.log('Ошибка:', e);
 }
 ```
 
@@ -153,18 +148,20 @@ catch(e) {
 
 ```ts
 function validate(value: number) {
-  if (value < 0 || value > 100) throw new Error('Невалидное значение');
+    if (value < 0 || value > 100)
+        throw new Error('Невалидное значение');
 }
 ```
 
 Использование `Error` для таких случаев - плохая идея, так как ошибка не отражена в определении типа для проверки функции `(value:number) => void`. Вместо этого лучший способ создать метод проверки:
 
 ```ts
-function validate(value: number): {error?: string} {
-  if (value < 0 || value > 100) return {error:'Невалидное значение'};
+function validate(value: number): { error?: string } {
+    if (value < 0 || value > 100)
+        return { error: 'Невалидное значение' };
 }
 ```
 
 И теперь это отражено в системе типов.
 
-> Если вы не хотите обрабатывать ошибку очень общим (простым / универсальным и т.д.) способом, не *бросайте* ошибку.
+> Если вы не хотите обрабатывать ошибку очень общим (простым / универсальным и т.д.) способом, не _бросайте_ ошибку.

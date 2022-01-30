@@ -1,17 +1,15 @@
-* [Защита типа](#type-guard)
-* [Защита типа, определяемая пользователем](#user-defined-type-guards)
+# Защита типа
 
-## Защита типа
 Защита типа позволяет уточнить тип объекта внутри блока условия.
 
-
-### typeof
+## typeof
 
 TypeScript знает об использовании JavaScript-операторов `instanceof` и `typeof`. Если вы используете их в блоке условия, TypeScript поймет, что тип переменной будет отличаться в этом блоке условия. Вот небольшой пример, где TypeScript понимает, что конкретной функции не существует в `string`, и указывает, что это, вероятно, было опечаткой пользователя:
 
 ```ts
 function doSomething(x: number | string) {
-    if (typeof x === 'string') { // Внутри блока TypeScript знает, что `x` должно быть строкой
+    if (typeof x === 'string') {
+        // Внутри блока TypeScript знает, что `x` должно быть строкой
         console.log(x.subtr(1)); // Ошибка, 'subtr' не существует для `string`
         console.log(x.substr(1)); // OK
     }
@@ -19,7 +17,7 @@ function doSomething(x: number | string) {
 }
 ```
 
-### instanceof
+## instanceof
 
 Вот пример с классом и `instanceof`:
 
@@ -53,7 +51,7 @@ doStuff(new Foo());
 doStuff(new Bar());
 ```
 
-TypeScript даже понимает `else`, поэтому, когда `if` уточняет один тип, он знает, что внутри else *это определенно уже другой тип*. Вот пример:
+TypeScript даже понимает `else`, поэтому, когда `if` уточняет один тип, он знает, что внутри else _это определенно уже другой тип_. Вот пример:
 
 ```ts
 class Foo {
@@ -68,8 +66,8 @@ function doStuff(arg: Foo | Bar) {
     if (arg instanceof Foo) {
         console.log(arg.foo); // OK
         console.log(arg.bar); // Ошибка!
-    }
-    else {  // ДОЛЖЕН БЫТЬ Bar!
+    } else {
+        // ДОЛЖЕН БЫТЬ Bar!
         console.log(arg.foo); // Ошибка!
         console.log(arg.bar); // OK
     }
@@ -79,56 +77,57 @@ doStuff(new Foo());
 doStuff(new Bar());
 ```
 
-### in 
+## in
 
 Оператор `in` выполняет безопасную проверку существования свойства объекта и может использоваться в качестве защиты типа. Например.
 
 ```ts
 interface A {
-  x: number;
+    x: number;
 }
 interface B {
-  y: string;
+    y: string;
 }
 
 function doStuff(q: A | B) {
-  if ('x' in q) {
-    // q: A
-  }
-  else {
-    // q: B
-  }
+    if ('x' in q) {
+        // q: A
+    } else {
+        // q: B
+    }
 }
 ```
 
-### Литерал защиты типа
+## Литерал защиты типа
 
 Когда у вас есть литералы типов в объединении, вы можете различить их, например:
 
 ```ts
 type Foo = {
-  kind: 'foo', // Литерал типа
-  foo: number
-}
+    kind: 'foo'; // Литерал типа
+    foo: number;
+};
 type Bar = {
-  kind: 'bar', // Литерал типа
-  bar: number
-}
+    kind: 'bar'; // Литерал типа
+    bar: number;
+};
 
 function doStuff(arg: Foo | Bar) {
     if (arg.kind === 'foo') {
         console.log(arg.foo); // OK
         console.log(arg.bar); // Ошибка!
-    }
-    else {  // ДОЛЖЕН БЫТЬ Bar!
+    } else {
+        // ДОЛЖЕН БЫТЬ Bar!
         console.log(arg.foo); // Ошибка!
         console.log(arg.bar); // OK
     }
 }
 ```
 
-### Защита типа, определяемая пользователем 
-JavaScript не имеет встроенной поддержки интроспекции. Когда вы используете простые объекты JavaScript (используя структурную типизацию себе на пользу), у вас даже нет доступа к `instanceof` или `typeof`. Для этих случаев вы можете создавать *функции для защиты типа, определяемой пользователем*. Это просто функции, которые возвращают `какойТоПараметрФункции - КакогоТоТипа`. Вот пример:
+## Защита типа, определяемая пользователем
+
+JavaScript не имеет встроенной поддержки интроспекции. Когда вы используете простые объекты JavaScript (используя структурную типизацию себе на пользу), у вас даже нет доступа к `instanceof` или `typeof`. Для этих случаев вы можете создавать _функции для защиты типа, определяемой пользователем_. Это просто функции, которые возвращают `какойТоПараметрФункции - КакогоТоТипа`. Вот пример:
+
 ```ts
 /**
  * Просто несколько интерфейсов
@@ -157,8 +156,7 @@ function doStuff(arg: Foo | Bar) {
     if (isFoo(arg)) {
         console.log(arg.foo); // OK
         console.log(arg.bar); // Ошибка!
-    }
-    else {
+    } else {
         console.log(arg.foo); // Ошибка!
         console.log(arg.bar); // OK
     }
@@ -168,24 +166,23 @@ doStuff({ foo: 123, common: '123' });
 doStuff({ bar: 123, common: '123' });
 ```
 
-### Защита типа и колбэки
+## Защита типа и колбэки
 
 TypeScript не предполагает, что защиты типов остаются активными в колбэках, поскольку делать такое предположение опасно. Например
 
 ```js
 // Пример
-declare var foo:{bar?: {baz: string}};
-function immediate(callback: ()=>void) {
-  callback();
+declare var foo: { bar?: { baz: string } };
+function immediate(callback: () => void) {
+    callback();
 }
-
 
 // Защита типа
 if (foo.bar) {
-  console.log(foo.bar.baz); // Okay
-  functionDoingSomeStuff(() => {
-    console.log(foo.bar.baz); // TS ошибка: Возможно объект 'undefined'
-  });
+    console.log(foo.bar.baz); // Okay
+    functionDoingSomeStuff(() => {
+        console.log(foo.bar.baz); // TS ошибка: Возможно объект 'undefined'
+    });
 }
 ```
 
@@ -194,10 +191,10 @@ if (foo.bar) {
 ```js
 // Защита типа
 if (foo.bar) {
-  console.log(foo.bar.baz); // Okay
-  const bar = foo.bar;
-  functionDoingSomeStuff(() => {
-    console.log(bar.baz); // Okay
-  });
+    console.log(foo.bar.baz); // Okay
+    const bar = foo.bar;
+    functionDoingSomeStuff(() => {
+        console.log(bar.baz); // Okay
+    });
 }
 ```

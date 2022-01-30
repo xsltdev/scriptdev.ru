@@ -1,1 +1,0 @@
-analogy with c headers

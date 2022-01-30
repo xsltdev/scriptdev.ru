@@ -160,9 +160,3 @@ var inc = (x) => x + 1;
 ### Резюме
 
 В этом разделе мы рассказали о движущей силе и дизайне TypeScript. Разобравшись с этим, мы можем погружаться в мельчайшие подробности TypeScript.
-
-[](Interfaces are open ended)
-[](Правила вывода типов)
-[](Cover all the annotations)
-[](Cover all ambients : also that there are no runtime enforcement)
-[](.ts vs. .d.ts)

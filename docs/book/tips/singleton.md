@@ -11,16 +11,17 @@ class Singleton {
     static getInstance() {
         if (!Singleton.instance) {
             Singleton.instance = new Singleton();
-            // ... здесь единожды выполняется инициализация ... 
+            // ... здесь единожды выполняется инициализация ...
         }
         return Singleton.instance;
     }
-    someMethod() { }
+    someMethod() {}
 }
 
-let something = new Singleton() // Ошибка: конструктор 'Singleton' является приватным.
+let something = new Singleton(); // Ошибка: конструктор 'Singleton' является
+// приватным.
 
-let instance = Singleton.getInstance() // сделать что-нибудь с экземпляром...
+let instance = Singleton.getInstance(); // сделать что-нибудь с экземпляром...
 ```
 
 Однако, если вам не нужна ленивая инициализация, вы можете вместо этого просто использовать `namespace`:
@@ -28,7 +29,7 @@ let instance = Singleton.getInstance() // сделать что-нибудь с 
 ```ts
 namespace Singleton {
     // ... здесь единожды выполняется инициализация ...
-    export function someMethod() { }
+    export function someMethod() {}
 }
 // Использование
 Singleton.someMethod();
@@ -36,13 +37,13 @@ Singleton.someMethod();
 
 > Предупреждение: Синглтон - это просто причудливое название для [global](http://stackoverflow.com/a/142450/390330)
 
-Для большинства проектов `namespace` можно заменить на *module*.
+Для большинства проектов `namespace` можно заменить на _module_.
 
 ```ts
 // someFile.ts
 // ... здесь единожды выполняется инициализация ...
-export function someMethod() { }
+export function someMethod() {}
 
 // Использование
-import {someMethod} from "./someFile";
+import { someMethod } from './someFile';
 ```

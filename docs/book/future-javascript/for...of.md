@@ -1,11 +1,11 @@
-### for...of
+# for...of
 
 Распространенная ошибка, с которой сталкиваются начинающие JavaScript разработчики - это то, что `for...in` для массива не итерирует элементы массива. Вместо этого итерация происходит по _ключам_ переданного объекта. Это показано на примере ниже. Здесь мы ожидаем `9,2,5`, но получаем индексы `0,1,2`:
 
 ```ts
 var someArray = [9, 2, 5];
 for (var item in someArray) {
-  console.log(item); // 0,1,2
+    console.log(item); // 0,1,2
 }
 ```
 
@@ -14,7 +14,7 @@ for (var item in someArray) {
 ```ts
 var someArray = [9, 2, 5];
 for (var item of someArray) {
-  console.log(item); // 9,2,5
+    console.log(item); // 9,2,5
 }
 ```
 
@@ -23,31 +23,31 @@ for (var item of someArray) {
 ```ts
 var hello = "is it me you're looking for?";
 for (var char of hello) {
-  console.log(char); // is it me you're looking for?
+    console.log(char); // is it me you're looking for?
 }
 ```
 
-#### Генерация JS
+## Генерация JS
 
 Для версий JS до ES6 TypeScript генерирует стандартный тип цикла `for (var i = 0; i < list.length; i++)`. Например, вот что генерируется для нашего предыдущего примера:
 
 ```ts
 var someArray = [9, 2, 5];
 for (var item of someArray) {
-  console.log(item);
+    console.log(item);
 }
 
 // становится //
 
 for (var _i = 0; _i < someArray.length; _i++) {
-  var item = someArray[_i];
-  console.log(item);
+    var item = someArray[_i];
+    console.log(item);
 }
 ```
 
 Вы видите, что использование `for...of` делает код более понятным и уменьшает его объем.
 
-#### Ограничения
+## Ограничения
 
 Для версий JS до ES6, сгенерированный код предполагает, что свойство `length` существует на объекте и этот объект может быть проиндексирован по номерам, например `obj[2]`. Это поддерживается только для строк и массивов для устаревших движков JS.
 
@@ -55,16 +55,16 @@ for (var _i = 0; _i < someArray.length; _i++) {
 
 ```ts
 let articleParagraphs = document.querySelectorAll(
-  'article > p'
+    'article > p'
 );
 // Ошибка: Nodelist is not an array type or a string type
 for (let paragraph of articleParagraphs) {
-  paragraph.classList.add('read');
+    paragraph.classList.add('read');
 }
 ```
 
 Используйте `for...of` только для случаев, когда _вы уверены_, что применяете это к строке или массиву. Помните, что это ограничение может быть удалено на следующих версиях TypeScript.
 
-#### Заключение
+## Заключение
 
 Вы можете удивиться, как часто вы итерируете элементы массива. В следующий раз, когда будете это делать, попробуйте использовать `for...of`. Вы можете просто порадовать следующего человека, который просматривает ваш код.

@@ -1,11 +1,12 @@
-### Переменные
-К примеру, чтобы рассказать TypeScript о [`process` variable](https://nodejs.org/api/process.html), вы *можете* сделать:
+# Переменные
+
+К примеру, чтобы рассказать TypeScript о [`process` variable](https://nodejs.org/api/process.html), вы _можете_ сделать:
 
 ```ts
 declare var process: any;
 ```
 
-> Но вам не *нужно* делать это для `process`, поскольку уже существует [поддерживающийся сообществом `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
+> Но вам не _нужно_ делать это для `process`, поскольку уже существует [поддерживающийся сообществом `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
 
 Это позволяет вам использовать переменную `process` без руганий от TypeScript'а:
 
@@ -22,14 +23,14 @@ interface Process {
 declare var process: Process;
 ```
 
-Это позволяет другим разработчикам *расширять* сущность этих глобальных переменных, в то же время сообщая TypeScript о таких модификациях. Например. рассмотрим следующий случай, когда мы добавляем функцию `exitWithLogging` к процессу чтобы поиграться:
+Это позволяет другим разработчикам _расширять_ сущность этих глобальных переменных, в то же время сообщая TypeScript о таких модификациях. Например. рассмотрим следующий случай, когда мы добавляем функцию `exitWithLogging` к процессу чтобы поиграться:
 
 ```ts
 interface Process {
     exitWithLogging(code?: number): void;
 }
-process.exitWithLogging = function() {
-    console.log("выход");
+process.exitWithLogging = function () {
+    console.log('выход');
     process.exit.apply(process, arguments);
 };
 ```
