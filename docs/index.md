@@ -5,39 +5,18 @@ hide:
   - navigation
 ---
 
-# Справочник Javascript
+# Справочник Typescript
 
-<div class="layout layout2" markdown="1">
-
-<div class="cell" markdown="1">
-
-[![JS](js.svg){: style="height:16px;width:16px;vertical-align:middle;"} Javascript](/js/)
-: Справочник по языку программирования Javascript с примерами кода.<br />[Углубленный JS](/js/garden/) &bullet; [Структуры данных](/js/data-structures/)
-
-[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Typescript](/ts/)
+[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Руководство Typescript](/guide/)
 : Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
 
-</div>
-
-<div class="cell" markdown="1">
-
-[JSON](/json/)
-: Простой формат обмена данными, удобный для чтения и написания как человеком, так и компьютером
-
-[Web API](/webapi/)
-: При написании кода на JavaScript для Веба доступно большое количество API
-
-[WebApp Manifest](/manifest/)
-: Манифесты являются частью набора веб-технологий, называемых прогрессивными веб-приложениями, представляющими собой веб-сайты, которые можно установить на домашний экран устройства без магазина приложений
-
-</div>
-
-</div>
+[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Книга Typescript](/book/)
+: Глубокое погружение в Typescript
 
 !!!abstract "Справочники"
 
     [![HTML](html.svg){: style="height:16px;width:16px;vertical-align:middle;"} HTML + CSS](https://hcdev.ru/) &nbsp;&nbsp;&nbsp;
-    **[![JS](js.svg){: style="height:16px;width:16px;vertical-align:middle;"} JS](https://scriptdev.ru/)** &nbsp;&nbsp;&nbsp;
+    **[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Typescript](https://scriptdev.ru/)** &nbsp;&nbsp;&nbsp;
     [![Angular](angular.svg){: style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
     [![React](react.svg){: style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;

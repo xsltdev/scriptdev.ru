@@ -1,0 +1,25 @@
+title: Система типов
+nav:
+    - index.md
+    - migrating.md
+    - types.md
+    - ambient
+    - interfaces.md
+    - enums.md
+    - lib.d.ts.md
+    - functions.md
+    - callable.md
+    - type-assertion.md
+    - freshness.md
+    - typeGuard.md
+    - literal-types.md
+    - readonly.md
+    - generics.md
+    - type-inference.md
+    - type-compatibility.md
+    - never.md
+    - discriminated-unions.md
+    - index-signatures.md
+    - moving-types.md
+    - exceptions.md
+    - mixins.md

@@ -1,8 +1,8 @@
-site_name: Javascript
+site_name: Typescript
 site_url: https://scriptdev.ru/
-site_description: Справочник Javascript-разработчика с примерами кода
+site_description: Справочник Typescript-разработчика с примерами кода
 site_author: scriptdev.ru
-copyright: (C) 2021, Справочник разработчика Javascript с примерами кода
+copyright: (C) 2021, Справочник разработчика Typescript с примерами кода
 
 repo_name: 'Справочник на Github'
 repo_url: 'https://github.com/xsltdev/scriptdev.ru'
@@ -17,15 +17,15 @@ theme:
     search_index_only: true
 
     palette:
-        primary: white
-        accent: amber
+        primary: blue
+        accent: blue
     language: ru
     features:
         - navigation.tabs
         - navigation.tracking
         - navigation.instant
-    favicon: js.svg
-    logo: js.svg
+    favicon: ts.svg
+    logo: ts.svg
 
 extra:
     social:
@@ -34,7 +34,7 @@ extra:
           name: HTML and CSS docs
         - icon: fontawesome/brands/js
           link: 'https://scriptdev.ru/'
-          name: Javascript
+          name: Typescript
         - icon: fontawesome/brands/angular
           link: 'https://angdev.ru/'
           name: Angular docs

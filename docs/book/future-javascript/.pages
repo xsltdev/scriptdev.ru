@@ -1,0 +1,17 @@
+title: Будущее JavaScript
+nav:
+    - index.md
+    - classes.md
+    - classes-emit.md
+    - arrow-functions.md
+    - rest-parameters.md
+    - let.md
+    - const.md
+    - destructuring.md
+    - spread-operator.md
+    - for...of.md
+    - iterators.md
+    - template-strings.md
+    - promise.md
+    - generators.md
+    - async-await.md

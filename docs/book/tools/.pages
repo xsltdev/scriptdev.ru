@@ -1,0 +1,7 @@
+title: Инструменты
+nav:
+    - index.md
+    - prettier.md
+    - husky.md
+    - eslint.md
+    - changelog.md

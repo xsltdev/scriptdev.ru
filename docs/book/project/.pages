@@ -1,0 +1,12 @@
+title: Проекты
+nav:
+    - index.md
+    - compilation-context.md
+    - tsconfig.md
+    - files.md
+    - declarationspaces.md
+    - modules.md
+    - external-modules.md
+    - globals.md
+    - namespaces.md
+    - dynamic-import-expressions.md

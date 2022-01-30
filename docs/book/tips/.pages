@@ -1,0 +1,22 @@
+title: Советы
+nav:
+    - index.md
+    - stringEnums.md
+    - nominalTyping.md
+    - statefulFunctions.md
+    - bind.md
+    - currying.md
+    - typeInstantiation.md
+    - lazyObjectLiteralInitialization.md
+    - classesAreUseful.md
+    - defaultIsBad.md
+    - propertySetters.md
+    - outFile.md
+    - jquery.md
+    - staticConstructor.md
+    - singleton.md
+    - functionParameters.md
+    - build-toggles.md
+    - barrel.md
+    - create-arrays.md
+    - typed-event.md

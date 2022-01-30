@@ -1,7 +1,4 @@
 nav:
     - index.md
-    - js
-    - ts
-    - json
-    - webapi
-    - manifest
+    - guide
+    - book

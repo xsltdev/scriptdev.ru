@@ -1,0 +1,5 @@
+title: Options
+nav:
+    - index.md
+    - noImplicitAny.md
+    - strictNullChecks.md
