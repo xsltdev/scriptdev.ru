@@ -146,5 +146,5 @@ try {
 -   Удалите `node_modules` и все `package-lock` (или yarn lock) и снова запустите `npm install`.
 -   Если это не сработает, найдите невалидный модуль (все модули, используемые вашим проектом, должны иметь `react.d.ts` как `peerDependency`, а не жесткую `dependency`) и сообщите об этом команде разработчиков этого модуля.
 
-[ambient]: ../types/ambient/d.ts.md
-[modules]: ../project/modules.md
+[ambient]: types/ambient/d.ts.md
+[modules]: project/modules.md
