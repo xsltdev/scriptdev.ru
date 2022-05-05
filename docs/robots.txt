@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Clean-param: query
 
 Host: https://scriptdev.ru/
 Sitemap: https://scriptdev.ru/sitemap.xml
