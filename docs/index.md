@@ -1,16 +1,17 @@
 ---
 title: Главная
+description: Справочник Typescript
 hide:
   - toc
   - navigation
 ---
 
-# Справочник Typescript
+# ![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Справочник Typescript
 
-[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Руководство Typescript](/guide/)
+[Руководство Typescript](/guide/)
 : Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
 
-[![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Книга Typescript](/book/)
+[Книга Typescript](/book/)
 : Глубокое погружение в Typescript
 
 !!!abstract "Справочники"
