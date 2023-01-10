@@ -1,6 +1,6 @@
 # Async Await
 
-[A PRO egghead видеокурс охватывающий этот же материал](https://egghead.io/courses/async-await-using-typescript)
+[A PRO egghead видеокурс, охватывающий этот же материал](https://egghead.io/courses/async-await-using-typescript)
 
 В качестве мысленного эксперимента представьте себе: способ сказать среде выполнения JavaScript приостановить выполнение кода по ключевому слову `await` при использовании вместе с промисом и возобновить _только_ единожды (и если) промис выполнен:
 
@@ -48,7 +48,7 @@ const foo = wrapToReturnPromise(function* () {
 
 ## Async Await поддержка в TypeScript
 
-**Async - Await** поддерживается [TypeScript начиная с версии 1.7](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html). Асинхронные функции начинаются с ключевого слова _async_; _await_ приостанавливает выполнение, пока не будет получено значение из _Promise_.
+**Async - Await** поддерживается [TypeScript, начиная с версии 1.7](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html). Асинхронные функции начинаются с ключевого слова _async_; _await_ приостанавливает выполнение, пока не будет получено значение из _Promise_.
 
 Ранее async / await поддерживался только в **es6**, и транспилировался непосредственно в **ES6 generators**.
 
@@ -355,7 +355,7 @@ dramaticWelcome();
 
     Для обоих сценариев применения нам необходимо убедиться, что наш исполняемый код имеет глобальный доступ к ECMAScript-совместимому Promise. Как вариант это может быть использование полифилла для Promise. Мы также должны убедиться, что TypeScript знает, что Promise поддерживается, установив для нашего флага lib что-то вроде «dom», «es2015» или «dom», «es2015.promise», «es5».
 
-Мы можем увидеть, какие браузеры имеют поддержку Promise (нативную и заполифилленую) [здесь](https://kangax.github.io/compat-table/es6/#test-Promise).
+Мы можем увидеть, какие браузеры имеют поддержку Promise (нативную и заполифилленную) [здесь](https://kangax.github.io/compat-table/es6/#test-Promise).
 
 [generators]: ./generators.md
 [asyncawaites5code]: https://cdn.rawgit.com/basarat/typescript-book/705e4496/code/async-await/es5/asyncAwaitES5.js
