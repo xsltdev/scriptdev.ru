@@ -123,7 +123,7 @@ console.log(Math.sqrt(-1)); // NaN
 Запомните: Проверка на равенство **не** работает с `NaN`. Используейте `Number.isNaN`:
 
 ```js
-// Не верно
+// Неверно
 console.log(NaN === NaN); // false!!
 
 // Верно
