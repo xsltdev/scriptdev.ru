@@ -2,3 +2,4 @@ nav:
     - index.md
     - guide
     - book
+    - prisma-orm
