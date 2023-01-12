@@ -14,6 +14,11 @@ hide:
 [Книга Typescript](/book/)
 : Глубокое погружение в Typescript
 
+## Экосистема
+
+[Prisma ORM](/prisma-orm/)
+: Prisma — это современное (продвинутое) объектно-реляционное отображение (Object-Relational Mapping, ORM) для Node.js и TypeScript.
+
 !!!abstract "Справочники"
 
     [![HTML](html.svg){: style="height:16px;width:16px;vertical-align:middle;"} HTML + CSS](https://hcdev.ru/) &nbsp;&nbsp;&nbsp;
