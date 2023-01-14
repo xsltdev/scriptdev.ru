@@ -11,8 +11,8 @@ theme:
     name: material
     custom_dir: overrides
     # Don't include MkDocs' JavaScript
-    include_search_page: false
-    search_index_only: true
+    # include_search_page: false
+    # search_index_only: true
 
     palette:
         - media: '(prefers-color-scheme: light)'
@@ -70,7 +70,7 @@ plugins:
               - ru
               - en
     - awesome-pages
-    - section-index
+    # - section-index
     - social
 
 extra_css:

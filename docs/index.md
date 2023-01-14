@@ -2,8 +2,8 @@
 title: Главная
 description: Справочник Typescript
 hide:
-  - toc
-  - navigation
+    - toc
+    - navigation
 ---
 
 # ![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Справочник Typescript
