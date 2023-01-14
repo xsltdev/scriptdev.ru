@@ -10,15 +10,25 @@ repo_url: 'https://github.com/xsltdev/scriptdev.ru'
 theme:
     name: material
     custom_dir: overrides
-    # name: null
-    # custom_dir: 'theme/material'
     # Don't include MkDocs' JavaScript
     include_search_page: false
     search_index_only: true
 
     palette:
-        primary: blue
-        accent: blue
+        - media: '(prefers-color-scheme: light)'
+          scheme: default
+          primary: blue
+          accent: blue
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Тёмная тема
+        - media: '(prefers-color-scheme: dark)'
+          scheme: slate
+          primary: blue
+          accent: blue
+          toggle:
+              icon: material/toggle-switch
+              name: Светлая тема
     language: ru
     features:
         - navigation.tabs
@@ -28,28 +38,11 @@ theme:
     logo: ts.svg
 
 extra:
+    generator: false
     social:
-        - icon: fontawesome/brands/html5
-          link: 'https://hcdev.ru/'
-          name: HTML and CSS docs
-        - icon: fontawesome/brands/js
-          link: 'https://scriptdev.ru/'
-          name: Typescript
-        - icon: fontawesome/brands/angular
-          link: 'https://angdev.ru/'
-          name: Angular docs
-        - icon: fontawesome/brands/react
-          link: 'https://reactdev.ru/'
-          name: React docs
-        - icon: fontawesome/brands/node-js
-          link: 'https://nodejsdev.ru/'
-          name: Node.js docs
-        - icon: fontawesome/brands/python
-          link: 'https://py3dev.ru/'
-          name: Python 3 docs
-        - icon: fontawesome/solid/code
-          link: 'https://xsltdev.ru/'
-          name: XSLT docs
+        - icon: fontawesome/brands/telegram
+          link: https://t.me/nodejsdev_ru
+          name: Группа в Telegram
 
 #google_analytics:
 #    - UA-34215161-1
@@ -69,6 +62,7 @@ markdown_extensions:
           emoji_generator: !!python/name:materialx.emoji.to_svg
     - pymdownx.tabbed
     - pymdownx.superfences
+    - pymdownx.keys
 
 plugins:
     - search:
