@@ -3,6 +3,10 @@ title: Prisma
 description: Prisma — это современное (продвинутое) объектно-реляционное отображение (Object-Relational Mapping, ORM) для Node.js и TypeScript
 ---
 
+# Prisma
+
+![Prisma](logo-prisma.svg)
+
 **Prisma** — это современное (продвинутое) объектно-реляционное отображение (Object-Relational Mapping, ORM) для [Node.js](https://nodejsdev.ru/) и [TypeScript](https://scriptdev.ru/).
 
 Проще говоря, Prisma — это инструмент, позволяющий работать с реляционными (PostgreSQL, MySQL, SQL Server, SQLite) и нереляционной (MongoDB) базами данных с помощью JavaScript или TypeScript без использования SQL (хотя такая возможность имеется).
