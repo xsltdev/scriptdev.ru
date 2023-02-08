@@ -34,6 +34,8 @@ theme:
         - navigation.tabs
         - navigation.tracking
         - navigation.instant
+        - navigation.top
+        - content.action.edit
     favicon: ts.svg
     logo: ts.svg
 
@@ -92,4 +94,4 @@ plugins:
     - social
 
 extra_css:
-    - '/assets/stylesheets/styles.css?2'
+    - '/assets/stylesheets/styles.css?3'
