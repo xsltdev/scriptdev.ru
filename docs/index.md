@@ -16,7 +16,7 @@ hide:
 
 ## Экосистема
 
-[Prisma ORM](https://dbasedev.ru/prisma-orm/)
+[Prisma ORM](https://dbasedev.ru/orm/prisma/)
 : Prisma — это современное (продвинутое) объектно-реляционное отображение (Object-Relational Mapping, ORM) для Node.js и TypeScript.
 
 !!!abstract "Справочники"
