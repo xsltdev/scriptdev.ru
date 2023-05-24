@@ -17,15 +17,15 @@ theme:
     palette:
         - media: '(prefers-color-scheme: light)'
           scheme: default
-          primary: blue
-          accent: blue
+          primary: indigo
+          accent: indigo
           toggle:
               icon: material/toggle-switch-off-outline
               name: Тёмная тема
         - media: '(prefers-color-scheme: dark)'
           scheme: slate
-          primary: blue
-          accent: blue
+          primary: indigo
+          accent: indigo
           toggle:
               icon: material/toggle-switch
               name: Светлая тема
