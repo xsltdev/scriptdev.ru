@@ -6,18 +6,27 @@ hide:
     - navigation
 ---
 
-# ![TS](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Справочник Typescript
+# ![TS](ts.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник Typescript
 
-[Руководство Typescript](/guide/)
-: Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap: 30px; place-items: stretch;" markdown>
 
-[Книга Typescript](/book/)
-: Глубокое погружение в Typescript
+**[![TS](ts.svg){: style="height:20px;width:20px;vertical-align:middle;"} TypeScript](https://www.typescriptlang.org/)** — язык программирования, позиционируемый как средство разработки веб-приложений, расширяющее возможности JavaScript.
 
-## Экосистема
+!!! note "Руководство Typescript"
 
-[Prisma ORM](/prisma-orm/)
-: Prisma — это современное (продвинутое) объектно-реляционное отображение (Object-Relational Mapping, ORM) для Node.js и TypeScript.
+    Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
+
+    [Руководство](/guide/){ .md-button }
+
+!!! note "Книга Typescript"
+
+    Глубокое погружение в Typescript
+
+    [Книга Typescript](/book/){ .md-button }
+
+</div>
+
+---
 
 !!!abstract "Справочники"
 
