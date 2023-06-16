@@ -6,23 +6,27 @@ hide:
     - navigation
 ---
 
-# ![TS](ts.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник Typescript
+# ![TS](ts.svg){: style="height:42px;width:42px;vertical-align:middle;"} Справочник Typescript
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap: 30px; place-items: stretch;" markdown>
+**[TypeScript :octicons-link-external-16:](https://www.typescriptlang.org/)** — язык программирования, позиционируемый как средство разработки веб-приложений, расширяющее возможности JavaScript.
 
-**[![TS](ts.svg){: style="height:20px;width:20px;vertical-align:middle;"} TypeScript](https://www.typescriptlang.org/)** — язык программирования, позиционируемый как средство разработки веб-приложений, расширяющее возможности JavaScript.
+<div class="grid cards" style="margin-top: 1.6em" markdown>
 
-!!! note "Руководство Typescript"
+-   :simple-typescript:{ .lg .middle } **Typescript**
 
-    Typescript 4.2 Definition Guide. Перевод на русский язык официальной документации.
+    ***
 
-    [Руководство](/guide/){ .md-button }
+    Перевод на русский язык официальной документации.
 
-!!! note "Книга Typescript"
+    **[:octicons-arrow-right-24: Typescript](/guide/)** <small>v4.2</small>
 
-    Глубокое погружение в Typescript
+-   :octicons-book-24:{ .lg .middle } **Книга**
 
-    [Книга Typescript](/book/){ .md-button }
+	***
+
+	Глубокое погружение в Typescript
+
+	[:octicons-arrow-right-24: Книга Typescript](/book/)
 
 </div>
 
