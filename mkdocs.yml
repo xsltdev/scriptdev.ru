@@ -112,3 +112,7 @@ plugins:
 
 extra_css:
     - '/assets/stylesheets/styles.css?4'
+
+extra_javascript:
+    - path: '/assets/javascripts/xdev-browser.js'
+      type: module
