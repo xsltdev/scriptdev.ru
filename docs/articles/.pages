@@ -1,4 +1,7 @@
 title: Статьи
 nav:
     - index.md
+    - making-sense-of-senseless-javascript-features
+    - event-loop.md
+    - 67debug
     - ...
