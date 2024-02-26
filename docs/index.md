@@ -30,6 +30,36 @@ hide:
 
 </div>
 
+## Бесплатные курсы по Typescript
+
+Бесплатные курсы и видео-уроки по языку Typescript.
+
+<div class="grid cards" style="margin-top: 1.6em" markdown>
+
+-   :material-book-education:{ .lg .middle } **Курсы**
+
+    ***
+
+	[:octicons-arrow-right-24: Курс TypeScript](https://code-basics.com/ru/languages/typescript) <small>Hexlet</small>
+
+    [:octicons-arrow-right-24: Создание приложений с помощью TypeScript](https://learn.microsoft.com/ru-ru/training/paths/build-javascript-applications-typescript/) <small>Microsoft</small>
+
+	[:octicons-arrow-right-24: Введение в TypeScript](https://stepik.org/course/118563/promo) <small>stepik</small>
+
+-   :material-youtube-tv:{ .lg .middle } **Видео-курсы**
+
+    ***
+
+    [:octicons-arrow-right-24: TypeScript](https://www.youtube.com/playlist?list=PLNkWIWHIRwMEm1FgiLjHqSky27x5rXvQa) <small>webDev</small>
+
+	[:octicons-arrow-right-24: Уроки TypeScript](https://www.youtube.com/playlist?list=PLFe0raUk4QF5QqZ8PYuPcoInxAJ1gaHpj) <small>Веб Программирование</small>
+
+	[:octicons-arrow-right-24: Курс по TypeScript](https://www.youtube.com/playlist?list=PL0BJapvyPWKGg5TsDbLKwT0k1A_MSYRjc) <small>Mykhailovskyi StudyNew</small>
+
+</div>
+
+:material-chat-plus-outline: <small>Ссылки на другие хорошие и **бесплатные** курсы можно оставить в комментарии или через пул-реквест.</small>
+
 ---
 
 !!!abstract "Справочники"
