@@ -1,4 +1,12 @@
+---
+description: Интересные статьи про JAvascript и Typescript
+---
+
 # Статьи
+
+[Визуализация JavaScript: выполнение промисов](./promise-execution/index.md)
+
+: В этой статье мы погрузимся во внутреннюю работу промисов и узнаем, как они позволяют выполнять неблокирующие асинхронные задачи в JavaScript
 
 [Осмысление "бессмысленных" свойств JavaScript](./making-sense-of-senseless-javascript-features/index.md)
 
