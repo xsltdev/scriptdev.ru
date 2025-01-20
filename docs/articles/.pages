@@ -1,6 +1,7 @@
 title: Статьи
 nav:
     - index.md
+    - tsconfig-json.md
     - promise-execution
     - making-sense-of-senseless-javascript-features
     - event-loop.md
