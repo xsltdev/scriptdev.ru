@@ -1,0 +1,9 @@
+title: Zod 4
+nav:
+    - index.md
+    - basics.md
+    - api.md
+    - error-customization.md
+    - error-formatting.md
+    - metadata.md
+    - json-schema.md

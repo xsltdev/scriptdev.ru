@@ -1,0 +1,13 @@
+title: Rust и WebAssembly - Game of Life
+nav:
+    - index.md
+    - setup.md
+    - hello-world.md
+    - rules.md
+    - implementing.md
+    - testing.md
+    - debugging.md
+    - interactivity.md
+    - time-profiling.md
+    - code-size.md
+    - publishing-to-npm.md

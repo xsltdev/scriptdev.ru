@@ -28,6 +28,14 @@ hide:
 
     [:octicons-arrow-right-24: Книга Typescript](/book/)
 
+-   :simple-zod:{ .lg .middle } **Библиотеки**
+
+    ***
+
+    Экосистема Typescript
+
+    [:octicons-arrow-right-24: Zod](./libs/zod.4/index.md) <small>v4</small>
+
 </div>
 
 ## Бесплатные курсы по Typescript
@@ -40,11 +48,11 @@ hide:
 
     ***
 
-	[:octicons-arrow-right-24: Курс TypeScript](https://code-basics.com/ru/languages/typescript) <small>Hexlet</small>
+    [:octicons-arrow-right-24: Курс TypeScript](https://code-basics.com/ru/languages/typescript) <small>Hexlet</small>
 
     [:octicons-arrow-right-24: Создание приложений с помощью TypeScript](https://learn.microsoft.com/ru-ru/training/paths/build-javascript-applications-typescript/) <small>Microsoft</small>
 
-	[:octicons-arrow-right-24: Введение в TypeScript](https://stepik.org/course/118563/promo) <small>stepik</small>
+    [:octicons-arrow-right-24: Введение в TypeScript](https://stepik.org/course/118563/promo) <small>stepik</small>
 
 -   :material-youtube-tv:{ .lg .middle } **Видео-курсы**
 
@@ -52,9 +60,9 @@ hide:
 
     [:octicons-arrow-right-24: TypeScript](https://www.youtube.com/playlist?list=PLNkWIWHIRwMEm1FgiLjHqSky27x5rXvQa) <small>webDev</small>
 
-	[:octicons-arrow-right-24: Уроки TypeScript](https://www.youtube.com/playlist?list=PLFe0raUk4QF5QqZ8PYuPcoInxAJ1gaHpj) <small>Веб Программирование</small>
+    [:octicons-arrow-right-24: Уроки TypeScript](https://www.youtube.com/playlist?list=PLFe0raUk4QF5QqZ8PYuPcoInxAJ1gaHpj) <small>Веб Программирование</small>
 
-	[:octicons-arrow-right-24: Курс по TypeScript](https://www.youtube.com/playlist?list=PL0BJapvyPWKGg5TsDbLKwT0k1A_MSYRjc) <small>Mykhailovskyi StudyNew</small>
+    [:octicons-arrow-right-24: Курс по TypeScript](https://www.youtube.com/playlist?list=PL0BJapvyPWKGg5TsDbLKwT0k1A_MSYRjc) <small>Mykhailovskyi StudyNew</small>
 
 </div>
 
