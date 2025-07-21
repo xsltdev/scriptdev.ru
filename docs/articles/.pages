@@ -2,6 +2,8 @@ title: Статьи
 nav:
     - index.md
     - game-of-life
+    - tsconfig-json.md
+    - promise-execution
     - making-sense-of-senseless-javascript-features
     - event-loop.md
     - 67debug
