@@ -7,4 +7,5 @@ nav:
     - making-sense-of-senseless-javascript-features
     - event-loop.md
     - 67debug
+    - i18n.md
     - ...
