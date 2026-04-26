@@ -1,27 +1,20 @@
-# Deploying our Game of Life Web Application to Production
+# Публикация веб-приложения «Игра жизни» в продакшен
 
-When we're happy with the project, the next step is to deploy it to a production
-server instead of our local development server. This is generally the same with
-Rust and WebAssembly as it is with anything else: put the files somewhere where
-they are exposed to the Web via an HTTP server!
+Когда проект готов, следующий шаг — выложить его на продакшен-сервер вместо локального dev-сервера. С Rust и WebAssembly всё то же, что и в общем случае: файлы должны быть доступны из сети через HTTP-сервер!
 
-We make sure our wasm module is an up-to-date build by running `wasm-pack` from
-within the `wasm-game-of-life` directory:
+Убедитесь, что wasm-модуль собран актуально: из каталога `wasm-game-of-life` выполните `wasm-pack`:
 
 ```
 wasm-pack build
 ```
 
-And then we bundle our JavaScript and HTML by running `webpack` within the
-`wasm-game-of-life/www` directory:
+Затем соберите JavaScript и HTML через `webpack` в каталоге `wasm-game-of-life/www`:
 
 ```
 ./node_modules/.bin/webpack
 ```
 
-This bundles the whole Web application—the `.wasm` binary, JavaScript files, and
-our HTML—and outputs it into the `wasm-game-of-life/www/dist` directory. Its
-contents should looks something like this:
+В результате собирается всё веб-приложение — бинарник `.wasm`, JavaScript и HTML — и попадает в `wasm-game-of-life/www/dist`. Содержимое может выглядеть примерно так:
 
 ```
 wasm-game-of-life/www/dist/
@@ -31,28 +24,12 @@ wasm-game-of-life/www/dist/
 └── index.html
 ```
 
-To use our application from a server, it must be properly configured to serve
-`.wasm` files with the correct [MIME type][MIME]—`application/wasm`.
+Чтобы приложение открывалось с сервера, тот должен отдавать `.wasm` с правильным [MIME-типом](https://developer.mozilla.org/ru/docs/Web/HTTP/Basics_of_HTTP/MIME_types) — `application/wasm`.
 
-[MIME]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+> **Примечание:** настройка сервера зависит от ОС; лучше найти руководство под вашу систему и веб-сервер. Ниже предполагается что-то вроде Debian/Ubuntu или CentOS/Red Hat/Fedora.
 
-> **Note**: Server configuration varies by operating system, it's recommended
-> you look up a tutorial for your specific operating system and web server. These
-> examples assume an environment like Debian/Ubuntu or CentOS/Red Hat/Fedora.
+Для nginx [добавьте `application/wasm wasm;` в `/etc/nginx/mime.types`](https://nginx.org/en/docs/http/ngx_http_core_module.html#types). Затем перезагрузите nginx: `sudo nginx -s reload`, чтобы подхватить изменения.
 
-For example with nginx, [add `application/wasm wasm;` to `/etc/nginx/mime.types`
-][nginx-mime]. Then reload nginx with `sudo nginx -s reload` to pick up the
-configuration change.
+Для Apache [добавьте `AddType application/wasm .wasm` в корень конфигурации](https://httpd.apache.org/docs/2.4/mod/mod_mime.html#addtype) — часто это `/etc/apache2/apache2.conf` или `/etc/httpd.d/conf/httpd.conf`. Перезагрузите Apache: `sudo apachectl -k graceful`.
 
-[nginx-mime]: https://nginx.org/en/docs/http/ngx_http_core_module.html#types
-
-For Apache [add `AddType application/wasm .wasm` to the root of your apache
-config][apache-mime], likely located at either `/etc/apache2/apache2.conf` or
-`/etc/httpd.d/conf/httpd.conf`. Reload Apache with `sudo apachectl -k graceful`.
-
-[apache-mime]: https://httpd.apache.org/docs/2.4/mod/mod_mime.html#addtype
-
-Finally, we can upload the contents of the `dist` directory to the production
-server, for example using SCP or an SFTP client. Copying the files to the web
-root (usually `/var/www/html` or `/var/www`) will allow anybody to see the final
-product.
+Наконец, можно залить содержимое `dist` на продакшен, например через SCP или SFTP-клиент. Если скопировать файлы в корень сайта (часто `/var/www/html` или `/var/www`), приложение станет доступно извне.

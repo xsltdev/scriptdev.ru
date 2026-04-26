@@ -1,112 +1,92 @@
-# Adding Interactivity
+---
+description: Интерактивность в игре жизни — пауза, клик по клеткам и связь JavaScript с WebAssembly
+---
 
-We will continue to explore the JavaScript and WebAssembly interface by adding
-some interactive features to our Game of Life implementation. We will enable
-users to toggle whether a cell is alive or dead by clicking on it, and
-allow pausing the game, which makes drawing cell patterns a lot easier.
+# Добавление интерактивности
 
-## Pausing and Resuming the Game
+Продолжим разбирать связку JavaScript и WebAssembly: добавим в реализацию игры жизни интерактив. Пользователь сможет переключать клетку «жива/мёртва» по клику и ставить игру на паузу — так удобнее рисовать паттерны.
 
-Let's add a button to toggle whether the game is playing or paused. To
-`wasm-game-of-life/www/index.html`, add the button right above the `<canvas>`:
+## Пауза и возобновление игры
+
+Добавим кнопку, переключающую режим «играет / на паузе». В файле `wasm-game-of-life/www/index.html` вставьте кнопку сразу над `<canvas>`:
 
 ```html
 <button id="play-pause"></button>
 ```
 
-In the `wasm-game-of-life/www/index.js` JavaScript, we will make the following
-changes:
+В JavaScript `wasm-game-of-life/www/index.js` сделайте следующее:
 
-* Keep track of the identifier returned by the latest call to
-  `requestAnimationFrame`, so that we can cancel the animation by calling
-  `cancelAnimationFrame` with that identifier.
+-   Храните идентификатор, который вернул последний вызов `requestAnimationFrame`, чтобы отменить анимацию через `cancelAnimationFrame` с этим идентификатором.
 
-* When the play/pause button is clicked, check for whether we have the
-  identifier for a queued animation frame. If we do, then the game is currently
-  playing, and we want to cancel the animation frame so that `renderLoop` isn't
-  called again, effectively pausing the game. If we do not have an identifier
-  for a queued animation frame, then we are currently paused, and we would like
-  to call `requestAnimationFrame` to resume the game.
+-   По клику на «play/pause» проверяйте, есть ли идентификатор запланированного кадра анимации. Если есть — игра идёт, нужно отменить кадр, чтобы `renderLoop` больше не вызывался (пауза). Если идентификатора нет — мы на паузе, вызываем `requestAnimationFrame`, чтобы возобновить игру.
 
-Because the JavaScript is driving the Rust and WebAssembly, this is all we need
-to do, and we don't need to change the Rust sources.
+Так как цикл ведёт JavaScript, менять исходники Rust не нужно.
 
-We introduce the `animationId` variable to keep track of the identifier returned
-by `requestAnimationFrame`. When there is no queued animation frame, we set this
-variable to `null`.
+Введём переменную `animationId` для идентификатора из `requestAnimationFrame`. Когда кадр не запланирован, в ней хранится `null`.
 
 ```js
 let animationId = null;
 
-// This function is the same as before, except the
-// result of `requestAnimationFrame` is assigned to
-// `animationId`.
+// Как раньше, но результат `requestAnimationFrame` сохраняем в `animationId`.
 const renderLoop = () => {
-  drawGrid();
-  drawCells();
+    drawGrid();
+    drawCells();
 
-  universe.tick();
+    universe.tick();
 
-  animationId = requestAnimationFrame(renderLoop);
+    animationId = requestAnimationFrame(renderLoop);
 };
 ```
 
-At any instant in time, we can tell whether the game is paused or not by
-inspecting the value of `animationId`:
+В любой момент по значению `animationId` видно, на паузе игра или нет:
 
 ```js
 const isPaused = () => {
-  return animationId === null;
+    return animationId === null;
 };
 ```
 
-Now, when the play/pause button is clicked, we check whether the game is
-currently paused or playing, and resume the `renderLoop` animation or cancel the
-next animation frame respectively. Additionally, we update the button's text
-icon to reflect the action that the button will take when clicked next.
+По клику на кнопку проверяем паузу или воспроизведение и либо снова запускаем `renderLoop`, либо отменяем следующий кадр. Заодно обновляем подпись на кнопке так, чтобы она показывала действие при следующем клике.
 
 ```js
-const playPauseButton = document.getElementById("play-pause");
+const playPauseButton = document.getElementById(
+    'play-pause'
+);
 
 const play = () => {
-  playPauseButton.textContent = "⏸";
-  renderLoop();
+    playPauseButton.textContent = '⏸';
+    renderLoop();
 };
 
 const pause = () => {
-  playPauseButton.textContent = "▶";
-  cancelAnimationFrame(animationId);
-  animationId = null;
+    playPauseButton.textContent = '▶';
+    cancelAnimationFrame(animationId);
+    animationId = null;
 };
 
-playPauseButton.addEventListener("click", event => {
-  if (isPaused()) {
-    play();
-  } else {
-    pause();
-  }
+playPauseButton.addEventListener('click', (event) => {
+    if (isPaused()) {
+        play();
+    } else {
+        pause();
+    }
 });
 ```
 
-Finally, we were previously kick-starting the game and its animation by calling
-`requestAnimationFrame(renderLoop)` directly, but we want to replace that with a
-call to `play` so that the button gets the correct initial text icon.
+Раньше мы запускали анимацию прямым вызовом `requestAnimationFrame(renderLoop)`; замените это на вызов `play`, чтобы с самого начала на кнопке была правильная подпись.
 
 ```diff
-// This used to be `requestAnimationFrame(renderLoop)`.
+// Раньше здесь было `requestAnimationFrame(renderLoop)`.
 play();
 ```
 
-Refresh [http://localhost:8080/](http://localhost:8080/) and we should now be
-able to pause and resume the game by clicking on the button!
+Обновите [http://localhost:8080/](http://localhost:8080/) — по кнопке можно ставить игру на паузу и снимать с паузы.
 
-## Toggling a Cell's State on `"click"` Events
+## Переключение состояния клетки по событию `"click"`
 
-Now that we can pause the game, it's time to add the ability to mutate the cells
-by clicking on them.
+Раз пауза есть, добавим изменение клеток по клику.
 
-To toggle a cell is to flip its state from alive to dead or from dead to
-alive. Add a `toggle` method to `Cell` in `wasm-game-of-life/src/lib.rs`:
+Переключить клетку — значит сменить состояние «жива» ↔ «мёртва». Добавьте метод `toggle` для `Cell` в `wasm-game-of-life/src/lib.rs`:
 
 ```rust
 impl Cell {
@@ -119,12 +99,10 @@ impl Cell {
 }
 ```
 
-To toggle the state of a cell at given row and column, we translate the row and
-column pair into an index into the cells vector and call the toggle method on
-the cell at that index:
+Чтобы переключить клетку в заданной строке и столбце, переводим пару (строка, столбец) в индекс в векторе клеток и вызываем `toggle` у этой клетки:
 
 ```rust
-/// Public methods, exported to JavaScript.
+/// Публичные методы, экспортируемые в JavaScript.
 #[wasm_bindgen]
 impl Universe {
     // ...
@@ -136,48 +114,42 @@ impl Universe {
 }
 ```
 
-This method is defined within the `impl` block that is annotated with
-`#[wasm_bindgen]` so that it can be called by JavaScript.
+Метод объявлен в блоке `impl` с атрибутом `#[wasm_bindgen]`, чтобы его можно было вызывать из JavaScript.
 
-In `wasm-game-of-life/www/index.js`, we listen to click events on the `<canvas>`
-element, translate the click event's page-relative coordinates into
-canvas-relative coordinates, and then into a row and column, invoke the
-`toggle_cell` method, and finally redraw the scene.
+В `wasm-game-of-life/www/index.js` подписываемся на клики по `<canvas>`: переводим координаты клика из системы страницы в координаты холста, затем в строку и столбец, вызываем `toggle_cell` и перерисовываем сцену.
 
 ```js
-canvas.addEventListener("click", event => {
-  const boundingRect = canvas.getBoundingClientRect();
+canvas.addEventListener('click', (event) => {
+    const boundingRect = canvas.getBoundingClientRect();
 
-  const scaleX = canvas.width / boundingRect.width;
-  const scaleY = canvas.height / boundingRect.height;
+    const scaleX = canvas.width / boundingRect.width;
+    const scaleY = canvas.height / boundingRect.height;
 
-  const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
-  const canvasTop = (event.clientY - boundingRect.top) * scaleY;
+    const canvasLeft =
+        (event.clientX - boundingRect.left) * scaleX;
+    const canvasTop =
+        (event.clientY - boundingRect.top) * scaleY;
 
-  const row = Math.min(Math.floor(canvasTop / (CELL_SIZE + 1)), height - 1);
-  const col = Math.min(Math.floor(canvasLeft / (CELL_SIZE + 1)), width - 1);
+    const row = Math.min(
+        Math.floor(canvasTop / (CELL_SIZE + 1)),
+        height - 1
+    );
+    const col = Math.min(
+        Math.floor(canvasLeft / (CELL_SIZE + 1)),
+        width - 1
+    );
 
-  universe.toggle_cell(row, col);
+    universe.toggle_cell(row, col);
 
-  drawGrid();
-  drawCells();
+    drawGrid();
+    drawCells();
 });
 ```
 
-Rebuild with `wasm-pack build` in `wasm-game-of-life`, then refresh
-[http://localhost:8080/](http://localhost:8080/) again and we can now draw our
-own patterns by clicking on the cells and toggling their state.
+Соберите проект командой `wasm-pack build` в каталоге `wasm-game-of-life`, снова откройте [http://localhost:8080/](http://localhost:8080/) — можно рисовать свои паттерны кликами по клеткам.
 
-## Exercises
+## Упражнения
 
-* Introduce an [`<input type="range">`][input-range] widget to control how many
-  ticks occur per animation frame.
-
-* Add a button that resets the universe to a random initial state when
-  clicked. Another button that resets the universe to all dead cells.
-
-* On `Ctrl + Click`, insert a
-  [glider](https://en.wikipedia.org/wiki/Glider_(Conway%27s_Life)) centered on
-  the target cell. On `Shift + Click`, insert a pulsar.
-
-[input-range]: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/range
+-   Добавьте виджет [`<input type="range">`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/input/range), чтобы задавать, сколько тиков выполняется за один кадр анимации.
+-   Кнопка сброса вселенной в случайное начальное состояние по клику. Ещё одна кнопка — сброс во «все клетки мёртвы».
+-   По `Ctrl + клик` вставляйте [планер (глайдер)](<https://ru.wikipedia.org/wiki/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B5%D1%80_(%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D1%8F_%D0%BA%D0%BB%D0%B5%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D0%B3%D0%BE_%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B0)>), центрированный на целевой клетке. По `Shift + клик` — [пульсар](<https://en.wikipedia.org/wiki/Pulsar_(Conway%27s_Life)>) (классический осциллятор в игре жизни).

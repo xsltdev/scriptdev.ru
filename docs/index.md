@@ -18,7 +18,7 @@ hide:
 
     Перевод на русский язык официальной документации.
 
-    **[:octicons-arrow-right-24: Typescript](/guide/)** <small>v4.2</small>
+    **[:octicons-arrow-right-24: Typescript](./guide/index.md)** <small>v4.2</small>
 
 -   :octicons-book-24:{ .lg .middle } **Книга**
 
@@ -26,7 +26,7 @@ hide:
 
     Глубокое погружение в Typescript
 
-    [:octicons-arrow-right-24: Книга Typescript](/book/)
+    [:octicons-arrow-right-24: Книга Typescript](./book/index.md)
 
 -   :simple-zod:{ .lg .middle } **Библиотеки**
 
@@ -76,9 +76,7 @@ hide:
     **[![TS](ts.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Typescript](https://scriptdev.ru/)** &nbsp;&nbsp;&nbsp;
     [![Angular](angular.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
     [![React](react.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Solid](solid.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Solid](https://soliddev.ru/) &nbsp;&nbsp;&nbsp;
     [![React Native](rn.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
     [![PWA](pwa.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} PWA](https://pwadev.ru/) &nbsp;&nbsp;&nbsp;
     [![Node.js](nodejs.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Python 3](python.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
     [![XSLT](xslt.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/) &nbsp;&nbsp;&nbsp;

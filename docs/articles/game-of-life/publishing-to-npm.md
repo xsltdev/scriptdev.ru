@@ -1,57 +1,49 @@
-# Publishing to npm
+# Публикация в npm
 
-Now that we have a working, fast, *and* small `wasm-game-of-life` package, we
-can publish it to npm so other JavaScript developers can reuse it, if they ever
-need an off-the-shelf Game of Life implementation.
+Теперь у нас есть рабочий, быстрый *и* компактный пакет `wasm-game-of-life` — можно опубликовать его в npm, чтобы другие разработчики на JavaScript могли им пользоваться, если им понадобится готовая реализация «Игры жизни».
 
-## Prerequisites
+## Предварительные требования
 
-First, [make sure you have an npm account](https://www.npmjs.com/signup).
+Во-первых, [зарегистрируйте аккаунт на npm](https://www.npmjs.com/signup), если его ещё нет.
 
-Second, make sure you are logged into your account locally, by running this
-command:
+Во-вторых, войдите в аккаунт локально, выполнив команду:
 
 ```
 wasm-pack login
 ```
 
-## Publishing
+## Публикация
 
-Make sure that the `wasm-game-of-life/pkg` build is up to date by running
-`wasm-pack` inside the `wasm-game-of-life` directory:
+Убедитесь, что сборка в `wasm-game-of-life/pkg` актуальна: из каталога `wasm-game-of-life` запустите `wasm-pack`:
 
 ```
 wasm-pack build
 ```
 
-Take a moment to check out the contents of `wasm-game-of-life/pkg` now, this is
-what we are publishing to npm in the next step!
+Загляните в содержимое `wasm-game-of-life/pkg` — именно это мы и будем выкладывать в npm на следующем шаге!
 
-When you're ready, run `wasm-pack publish` to upload the package to npm:
+Когда будете готовы, выполните `wasm-pack publish`, чтобы загрузить пакет в npm:
 
 ```
 wasm-pack publish
 ```
 
-That's all it takes to publish to npm!
+На этом публикация в npm заканчивается!
 
-...except other folks have also done this tutorial, and therefore the
-`wasm-game-of-life` name is taken on npm, and that last command probably didn't
-work.
+...кроме того, что этот туториал уже проходили другие люди, поэтому имя `wasm-game-of-life` на npm занято, и последняя команда, скорее всего, не сработала.
 
-Open up `wasm-game-of-life/Cargo.toml` and add your username to the end of the
-`name` to disambiguate the package in a unique way:
+Откройте `wasm-game-of-life/Cargo.toml` и допишите своё имя пользователя в конец поля `name`, чтобы пакет однозначно отличался от остальных:
 
 ```toml
 [package]
 name = "wasm-game-of-life-my-username"
 ```
 
-Then, rebuild and publish again:
+Затем снова соберите и опубликуйте:
 
 ```
 wasm-pack build
 wasm-pack publish
 ```
 
-This time it should work!
+На этот раз должно получиться!

@@ -145,7 +145,7 @@ ReactDOM.render(
 );
 ```
 
-## Разрабатывайте свое удивительное приложение
+## Разрабатывайте свое удивительное приложение {#develop-your-amazing-application}
 
 > Вы можете установить самые последние пакеты, используя `npm install typescript@latest react@latest react-dom@latest @types/react@latest @types/react-dom@latest webpack@latest webpack-dev-server@latest webpack-cli@latest ts-loader@latest clean-webpack-plugin@latest html-webpack-plugin@latest --save-exact`
 

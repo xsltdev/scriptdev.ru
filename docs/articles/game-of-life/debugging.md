@@ -1,22 +1,12 @@
-# Debugging
+# Отладка
 
-Before we write much more code, we will want to have some debugging tools in our
-belt for when things go wrong. Take a moment to review the [reference page
-listing tools and approaches available for debugging Rust-generated
-WebAssembly][reference-debugging].
+Прежде чем писать ещё много кода, стоит иметь под рукой средства отладки на случай ошибок. Ознакомьтесь со [справочной страницей: инструменты и подходы к отладке WebAssembly, сгенерированного из Rust](https://rustwasm.github.io/docs/book/reference/debugging.html).
 
-[reference-debugging]: ../reference/debugging.html
+## Логирование паник
 
-## Enable Logging for Panics
+[При панике в коде в консоли разработчика должны появляться понятные сообщения об ошибке.](https://rustwasm.github.io/docs/book/reference/debugging.html#logging-panics)
 
-[If our code panics, we want informative error messages to appear in the
-developer console.](../reference/debugging.html#logging-panics)
-
-Our `wasm-pack-template` comes with an optional, enabled-by-default dependency
-on [the `console_error_panic_hook` crate][panic-hook] that is configured in
-`wasm-game-of-life/src/utils.rs`. All we need to do is install the hook in an
-initialization function or common code path. We can call it inside the
-`Universe::new` constructor in `wasm-game-of-life/src/lib.rs`:
+В `wasm-pack-template` по умолчанию подключена опциональная зависимость [крейт `console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook), настройка — в `wasm-game-of-life/src/utils.rs`. Достаточно установить хук в функции инициализации или на общем пути выполнения. Например, вызвать его в конструкторе `Universe::new` в `wasm-game-of-life/src/lib.rs`:
 
 ```rust
 pub fn new() -> Universe {
@@ -26,15 +16,11 @@ pub fn new() -> Universe {
 }
 ```
 
-[panic-hook]: https://github.com/rustwasm/console_error_panic_hook
+## Добавляем логирование в «Игру жизни»
 
-## Add Logging to our Game of Life
+[Через `console.log` из крейта `web-sys` можно добавить логирование](https://rustwasm.github.io/docs/book/reference/debugging.html#logging-with-the-console-apis) по каждой ячейке в функции `Universe::tick`.
 
-Let's [use the `console.log` function via the `web-sys` crate to add some
-logging][logging] about each cell in our `Universe::tick` function.
-
-First, add `web-sys` as a dependency and enable its `"console"` feature in
-`wasm-game-of-life/Cargo.toml`:
+Сначала добавьте `web-sys` в зависимости и включите фичу `"console"` в `wasm-game-of-life/Cargo.toml`:
 
 ```toml
 [dependencies]
@@ -48,15 +34,12 @@ features = [
 ]
 ```
 
-For ergonomics, we'll wrap the `console.log` function up in a `println!`-style
-macro:
-
-[logging]: ../reference/debugging.html#logging-with-the-console-apis
+Для удобства обернём `console.log` в макрос в духе `println!`:
 
 ```rust
 extern crate web_sys;
 
-// A macro to provide `println!(..)`-style syntax for `console.log` logging.
+// Макрос с синтаксисом в стиле `println!(..)` для логирования через `console.log`.
 macro_rules! log {
     ( $( $t:tt )* ) => {
         web_sys::console::log_1(&format!( $( $t )* ).into());
@@ -64,9 +47,7 @@ macro_rules! log {
 }
 ```
 
-Now, we can start logging messages to the console by inserting calls to `log` in
-Rust code. For example, to log each cell's state, live neighbors count, and next
-state, we could modify `wasm-game-of-life/src/lib.rs` like this:
+Дальше в коде на Rust можно вставлять вызовы `log!` и писать в консоль. Например, чтобы логировать состояние ячейки, число живых соседей и следующее состояние, измените `wasm-game-of-life/src/lib.rs` так:
 
 ```diff
 diff --git a/src/lib.rs b/src/lib.rs
@@ -78,7 +59,7 @@ index f757641..a30e107 100755
                  let live_neighbors = self.live_neighbor_count(row, col);
 
 +                log!(
-+                    "cell[{}, {}] is initially {:?} and has {} live neighbors",
++                    "ячейка[{}, {}] изначально {:?}, живых соседей: {}",
 +                    row,
 +                    col,
 +                    cell,
@@ -86,54 +67,43 @@ index f757641..a30e107 100755
 +                );
 +
                  let next_cell = match (cell, live_neighbors) {
-                     // Rule 1: Any live cell with fewer than two live neighbours
-                     // dies, as if caused by underpopulation.
+                     // Правило 1: любая живая клетка с менее чем двумя живыми соседями
+                     // умирает от «недонаселения».
 @@ -140,6 +147,8 @@ impl Universe {
                      (otherwise, _) => otherwise,
                  };
 
-+                log!("    it becomes {:?}", next_cell);
++                log!("    следующее состояние: {:?}", next_cell);
 +
                  next[idx] = next_cell;
              }
          }
 ```
 
-## Using a Debugger to Pause Between Each Tick
+## Отладчик с паузой между каждым тиком
 
-[Browser's stepping debuggers are useful for inspecting the JavaScript that our
-Rust-generated WebAssembly interacts
-with.](../reference/debugging.html#using-a-debugger)
+[Пошаговый отладчик в браузере удобен, чтобы смотреть JavaScript, с которым взаимодействует наш WebAssembly из Rust.](https://rustwasm.github.io/docs/book/reference/debugging.html#using-a-debugger)
 
-For example, we can use the debugger to pause on each iteration of our
-`renderLoop` function by placing [a JavaScript `debugger;` statement][dbg-stmt]
-above our call to `universe.tick()`.
+Например, можно останавливаться на каждой итерации `renderLoop`, поставив [инструкцию JavaScript `debugger;`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/debugger) перед вызовом `universe.tick()`.
 
 ```js
 const renderLoop = () => {
-  debugger;
-  universe.tick();
+    debugger;
+    universe.tick();
 
-  drawGrid();
-  drawCells();
+    drawGrid();
+    drawCells();
 
-  requestAnimationFrame(renderLoop);
+    requestAnimationFrame(renderLoop);
 };
 ```
 
-This provides us with a convenient checkpoint for inspecting logged messages,
-and comparing the currently rendered frame to the previous one.
+Так удобно проверять записи в лог и сравнивать текущий кадр с предыдущим.
 
-[dbg-stmt]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/debugger
+![Скриншот отладки «Игры жизни»](./debugging.png)
 
-[![Screenshot of debugging the Game of Life](../images/game-of-life/debugging.png)](../images/game-of-life/debugging.png)
+## Упражнения
 
-## Exercises
+-   Добавьте в `tick` логирование строки и столбца каждой ячейки, у которой состояние перешло из «жива» в «мёртва» или наоборот.
 
-* Add logging to the `tick` function that records the row and column of each
-  cell that transitioned states from live to dead or vice versa.
-
-* Introduce a `panic!()` in the `Universe::new` method. Inspect the panic's
-  backtrace in your Web browser's JavaScript debugger. Disable debug symbols,
-  rebuild without the `console_error_panic_hook` optional dependency, and
-  inspect the stack trace again. Not as useful is it?
+-   Вставьте `panic!()` в метод `Universe::new`. Посмотрите трейс паники в JavaScript-отладчике браузера. Отключите отладочные символы, пересоберите без опциональной зависимости `console_error_panic_hook` и снова посмотрите стек. Без хука картина заметно хуже, не так ли?

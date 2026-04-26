@@ -351,7 +351,7 @@ Array.from($0.querySelectorAll('*')).filter(isBold);
 
 В Chrome вы можете просмотреть слушателей событий текущего выбранного элемента: `getEventListeners($0)`, например.
 
-![getEventListeners](getEventListeners.png)
+![getEventListeners](getEventListeners.avif)
 
 ### Мониторинг событий для элемента
 

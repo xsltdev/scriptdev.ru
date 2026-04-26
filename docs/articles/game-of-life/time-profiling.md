@@ -1,68 +1,64 @@
-# Time Profiling
+# Профилирование по времени
 
-In this chapter, we will improve the performance of our Game of Life
-implementation. We will use time profiling to guide our efforts.
+В этой главе мы улучшим производительность нашей реализации «Игры жизни». Будем опираться на замеры времени (time profiling), чтобы не действовать вслепую.
 
-Familiarize yourself with [the available tools for time profiling Rust and
-WebAssembly code](../reference/time-profiling.md) before continuing.
+Перед продолжением ознакомьтесь с [доступными инструментами для профилирования по времени кода на Rust и WebAssembly](https://rustwasm.github.io/docs/book/reference/time-profiling.html#available-tools).
 
-## Creating a Frames Per Second Timer with the `window.performance.now` Function
+## Счётчик FPS на основе `window.performance.now`
 
-This FPS timer will be useful as we investigate speeding up our Game of Life's
-rendering.
+Такой счётчик кадров в секунду пригодится, когда будем разбираться, как ускорить отрисовку «Игры жизни».
 
-We start by adding an `fps` object to `wasm-game-of-life/www/index.js`:
+Начнём с добавления объекта `fps` в `wasm-game-of-life/www/index.js`:
 
 ```js
-const fps = new class {
-  constructor() {
-    this.fps = document.getElementById("fps");
-    this.frames = [];
-    this.lastFrameTimeStamp = performance.now();
-  }
-
-  render() {
-    // Convert the delta time since the last frame render into a measure
-    // of frames per second.
-    const now = performance.now();
-    const delta = now - this.lastFrameTimeStamp;
-    this.lastFrameTimeStamp = now;
-    const fps = 1 / delta * 1000;
-
-    // Save only the latest 100 timings.
-    this.frames.push(fps);
-    if (this.frames.length > 100) {
-      this.frames.shift();
+const fps = new (class {
+    constructor() {
+        this.fps = document.getElementById('fps');
+        this.frames = [];
+        this.lastFrameTimeStamp = performance.now();
     }
 
-    // Find the max, min, and mean of our 100 latest timings.
-    let min = Infinity;
-    let max = -Infinity;
-    let sum = 0;
-    for (let i = 0; i < this.frames.length; i++) {
-      sum += this.frames[i];
-      min = Math.min(this.frames[i], min);
-      max = Math.max(this.frames[i], max);
-    }
-    let mean = sum / this.frames.length;
+    render() {
+        // Переводим интервал с предыдущего кадра в оценку кадров в секунду.
+        const now = performance.now();
+        const delta = now - this.lastFrameTimeStamp;
+        this.lastFrameTimeStamp = now;
+        const fps = (1 / delta) * 1000;
 
-    // Render the statistics.
-    this.fps.textContent = `
-Frames per Second:
-         latest = ${Math.round(fps)}
-avg of last 100 = ${Math.round(mean)}
-min of last 100 = ${Math.round(min)}
-max of last 100 = ${Math.round(max)}
+        // Храним только последние 100 измерений.
+        this.frames.push(fps);
+        if (this.frames.length > 100) {
+            this.frames.shift();
+        }
+
+        // Ищем минимум, максимум и среднее по последним 100 значениям.
+        let min = Infinity;
+        let max = -Infinity;
+        let sum = 0;
+        for (let i = 0; i < this.frames.length; i++) {
+            sum += this.frames[i];
+            min = Math.min(this.frames[i], min);
+            max = Math.max(this.frames[i], max);
+        }
+        let mean = sum / this.frames.length;
+
+        // Выводим статистику.
+        this.fps.textContent = `
+Кадров в секунду:
+         последний = ${Math.round(fps)}
+ среднее за 100 = ${Math.round(mean)}
+    мин за 100 = ${Math.round(min)}
+    макс за 100 = ${Math.round(max)}
 `.trim();
-  }
-};
+    }
+})();
 ```
 
-Next we call the `fps` `render` function on each iteration of `renderLoop`:
+Далее вызываем `fps.render()` на каждой итерации `renderLoop`:
 
 ```js
 const renderLoop = () => {
-    fps.render(); //new
+    fps.render(); // новое
 
     universe.tick();
     drawGrid();
@@ -72,33 +68,28 @@ const renderLoop = () => {
 };
 ```
 
-Finally, don't forget to add the `fps` element to
-`wasm-game-of-life/www/index.html`, just above the `<canvas>`:
+Не забудьте добавить элемент `fps` в `wasm-game-of-life/www/index.html` чуть выше `<canvas>`:
 
 ```html
 <div id="fps"></div>
 ```
 
-And add CSS to make its formatting nice:
+И CSS, чтобы вывод выглядел аккуратно:
 
 ```css
 #fps {
-  white-space: pre;
-  font-family: monospace;
+    white-space: pre;
+    font-family: monospace;
 }
 ```
 
-And voila! Refresh [http://localhost:8080](http://localhost:8080) and now we
-have an FPS counter!
+Готово! Обновите [http://localhost:8080](http://localhost:8080) — на странице появится счётчик FPS.
 
-[perf-now]: https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
+### Замер каждого `Universe::tick` через `console.time` и `console.timeEnd`
 
-### Time Each `Universe::tick` with `console.time` and `console.timeEnd`
+Чтобы измерить длительность каждого вызова `Universe::tick`, можно использовать `console.time` и `console.timeEnd` из крейта `web-sys`.
 
-To measure how long each invocation of `Universe::tick` takes, we can use
-`console.time` and `console.timeEnd` via the `web-sys` crate.
-
-First, add `web-sys` as a dependency to `wasm-game-of-life/Cargo.toml`:
+Сначала добавьте `web-sys` в зависимости `wasm-game-of-life/Cargo.toml`:
 
 ```toml
 [dependencies.web-sys]
@@ -108,8 +99,7 @@ features = [
 ]
 ```
 
-Because there should be a corresponding `console.timeEnd` invocation for every
-`console.time` call, it is convenient to wrap them both up in an [RAII][] type:
+На каждый вызов `console.time` должен приходиться соответствующий `console.timeEnd`, поэтому удобно обернуть оба вызова в тип с паттерном [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization):
 
 ```rust
 extern crate web_sys;
@@ -133,171 +123,127 @@ impl<'a> Drop for Timer<'a> {
 }
 ```
 
-Then, we can time how long each `Universe::tick` takes by adding this snippet to
-the top of the method:
+Затем можно замерить `Universe::tick`, добавив в начало метода:
 
 ```rust
 let _timer = Timer::new("Universe::tick");
 ```
 
-The time of how long each call to `Universe::tick` took are now logged in the
-console:
+Длительность каждого вызова `Universe::tick` теперь попадает в консоль:
 
-[![Screenshot of console.time logs](../images/game-of-life/console-time.png)](../images/game-of-life/console-time.png)
+[Снимок экрана: логи console.time](./console-time.png)
 
-Additionally, `console.time` and `console.timeEnd` pairs will show up in your
-browser's profiler's "timeline" or "waterfall" view:
+Кроме того, пары `console.time` / `console.timeEnd` отображаются во «временной шкале» или «водопаде» в профилировщике браузера:
 
-[![Screenshot of console.time logs](../images/game-of-life/console-time-in-profiler.png)](../images/game-of-life/console-time-in-profiler.png)
+[Снимок экрана: console.time в профилировщике](./console-time-in-profiler.png)
 
-[RAII]: https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization
+## Увеличиваем вселенную «Игры жизни»
 
-## Growing our Game of Life Universe
+> ⚠️ В этом разделе для примеров используются скриншоты из Firefox. В других браузерах инструменты похожи, но названия и вид панелей могут чуть отличаться. Суть профиля будет той же, а вот удобство отдельных представлений может различаться.
 
-> ⚠️ This section utilizes example screenshots from Firefox. While all modern
-> browsers have similar tools, there might be slight nuances to working with
-> different developer tools. The profile information you extract will be
-> essentially the same, but your mileage might vary in terms of the views you
-> see and the naming of different tools.
+Что будет, если сделать вселенную больше? Если заменить сетку 64×64 на 128×128 (изменив `Universe::new` в `wasm-game-of-life/src/lib.rs`), на моей машине FPS падает с ровных 60 до неровных ~40.
 
-What happens if we make our Game of Life universe larger? Replacing the 64 by 64
-universe with a 128 by 128 universe (by modifying `Universe::new` in
-`wasm-game-of-life/src/lib.rs`) results in FPS dropping from a smooth 60 to a
-choppy 40-ish on my machine.
+Если записать профиль и открыть вид «водопада», видно, что кадр анимации занимает больше 20 миллисекунд. При 60 FPS на весь кадр остаётся около шестнадцати миллисекунд — и это не только наш JavaScript и WebAssembly, но и остальная работа браузера, в том числе отрисовка.
 
-If we record a profile and look at the waterfall view, we see that each
-animation frame is taking over 20 milliseconds. Recall that 60 frames per second
-leaves sixteen milliseconds for the whole process of rendering a frame. That's
-not just our JavaScript and WebAssembly, but also everything else the browser is
-doing, such as painting.
+[Снимок экрана: водопад отрисовки кадра](./drawCells-before-waterfall.png)
 
-[![Screenshot of a waterfall view of rendering a frame](../images/game-of-life/drawCells-before-waterfall.png)](../images/game-of-life/drawCells-before-waterfall.png)
+Если разобрать один кадр анимации, оказывается, что сеттер `CanvasRenderingContext2D.fillStyle` очень дорогой!
 
-If we look at what happens within a single animation frame, we see that the
-`CanvasRenderingContext2D.fillStyle` setter is very expensive!
+> ⚠️ В Firefox, если вместо `CanvasRenderingContext2D.fillStyle` вы видите строку просто «DOM», включите в настройках инструментов производительности опцию «Show Gecko Platform Data»: [Включение Show Gecko Platform Data](./profiler-firefox-show-gecko-platform.png)
 
-> ⚠️ In Firefox, if you see a line that simply says "DOM" instead of the
-> `CanvasRenderingContext2D.fillStyle` mentioned above, you may need to turn on
-> the option for "Show Gecko Platform Data" in your performance developer tools
-> options:
->
-> [![Turning on Show Gecko Platform Data](../images/game-of-life/profiler-firefox-show-gecko-platform.png)](../images/game-of-life/profiler-firefox-show-gecko-platform.png)
+[Снимок экрана: flame graph отрисовки кадра](./drawCells-before-flamegraph.png)
 
-[![Screenshot of a flamegraph view of rendering a frame](../images/game-of-life/drawCells-before-flamegraph.png)](../images/game-of-life/drawCells-before-flamegraph.png)
+На агрегированном дереве вызовов по многим кадрам видно, что это не случайность:
 
-And we can confirm that this isn't an abnormality by looking at the call tree's
-aggregation of many frames:
+[Снимок экрана: call tree отрисовки кадра](./drawCells-before-calltree.png)
 
-[![Screenshot of a flamegraph view of rendering a frame](../images/game-of-life/drawCells-before-calltree.png)](../images/game-of-life/drawCells-before-calltree.png)
+Почти 40% времени уходит на этот сеттер!
 
-Nearly 40% of our time is spent in this setter!
+> ⚡ Можно было ожидать, что узким местом окажется что-то в методе `tick`, но это не так. Всегда опирайтесь на профилирование: время часто тратится не там, где вы его ждёте.
 
-> ⚡ We might have expected something in the `tick` method to be the performance
-> bottleneck, but it wasn't. Always let profiling guide your focus, since time
-> may be spent in places you don't expect it to be.
-
-In the `drawCells` function in `wasm-game-of-life/www/index.js`, the `fillStyle`
-property is set once for every cell in the universe, on every animation frame:
+В функции `drawCells` в `wasm-game-of-life/www/index.js` свойство `fillStyle` задаётся для каждой клетки вселенной на каждом кадре анимации:
 
 ```js
 for (let row = 0; row < height; row++) {
-  for (let col = 0; col < width; col++) {
-    const idx = getIndex(row, col);
+    for (let col = 0; col < width; col++) {
+        const idx = getIndex(row, col);
 
-    ctx.fillStyle = cells[idx] === DEAD
-      ? DEAD_COLOR
-      : ALIVE_COLOR;
+        ctx.fillStyle =
+            cells[idx] === DEAD ? DEAD_COLOR : ALIVE_COLOR;
 
-    ctx.fillRect(
-      col * (CELL_SIZE + 1) + 1,
-      row * (CELL_SIZE + 1) + 1,
-      CELL_SIZE,
-      CELL_SIZE
-    );
-  }
+        ctx.fillRect(
+            col * (CELL_SIZE + 1) + 1,
+            row * (CELL_SIZE + 1) + 1,
+            CELL_SIZE,
+            CELL_SIZE
+        );
+    }
 }
 ```
 
-Now that we have discovered that setting `fillStyle` is so expensive, what can
-we do to avoid setting it so often? We need to change `fillStyle` depending on
-whether a cell is alive or dead. If we set `fillStyle = ALIVE_COLOR` and then
-draw every alive cell in one pass, and then set `fillStyle = DEAD_COLOR` and
-draw every dead cell in another pass, then we only end setting `fillStyle`
-twice, rather than once for every cell.
+Раз смена `fillStyle` так дорога, как реже её вызывать? Значение должно зависеть от того, жива клетка или мёртва. Если выставить `fillStyle = ALIVE_COLOR` и в одном проходе нарисовать все живые клетки, затем `fillStyle = DEAD_COLOR` и во втором проходе — все мёртвые, `fillStyle` меняется только дважды, а не на каждую клетку.
 
 ```js
-// Alive cells.
+// Живые клетки.
 ctx.fillStyle = ALIVE_COLOR;
 for (let row = 0; row < height; row++) {
-  for (let col = 0; col < width; col++) {
-    const idx = getIndex(row, col);
-    if (cells[idx] !== Cell.Alive) {
-      continue;
-    }
+    for (let col = 0; col < width; col++) {
+        const idx = getIndex(row, col);
+        if (cells[idx] !== Cell.Alive) {
+            continue;
+        }
 
-    ctx.fillRect(
-      col * (CELL_SIZE + 1) + 1,
-      row * (CELL_SIZE + 1) + 1,
-      CELL_SIZE,
-      CELL_SIZE
-    );
-  }
+        ctx.fillRect(
+            col * (CELL_SIZE + 1) + 1,
+            row * (CELL_SIZE + 1) + 1,
+            CELL_SIZE,
+            CELL_SIZE
+        );
+    }
 }
 
-// Dead cells.
+// Мёртвые клетки.
 ctx.fillStyle = DEAD_COLOR;
 for (let row = 0; row < height; row++) {
-  for (let col = 0; col < width; col++) {
-    const idx = getIndex(row, col);
-    if (cells[idx] !== Cell.Dead) {
-      continue;
-    }
+    for (let col = 0; col < width; col++) {
+        const idx = getIndex(row, col);
+        if (cells[idx] !== Cell.Dead) {
+            continue;
+        }
 
-    ctx.fillRect(
-      col * (CELL_SIZE + 1) + 1,
-      row * (CELL_SIZE + 1) + 1,
-      CELL_SIZE,
-      CELL_SIZE
-    );
-  }
+        ctx.fillRect(
+            col * (CELL_SIZE + 1) + 1,
+            row * (CELL_SIZE + 1) + 1,
+            CELL_SIZE,
+            CELL_SIZE
+        );
+    }
 }
 ```
 
-After saving these changes and refreshing
-[http://localhost:8080/](http://localhost:8080/), rendering is back to a smooth
-60 frames per second.
+После сохранения и обновления [http://localhost:8080/](http://localhost:8080/) отрисовка снова держит ровные 60 FPS.
 
-If we take another profile, we can see that only about ten milliseconds are
-spent in each animation frame now.
+По новому профилю видно, что кадр теперь занимает около десяти миллисекунд.
 
-[![Screenshot of a waterfall view of rendering a frame after the drawCells changes](../images/game-of-life/drawCells-after-waterfall.png)](../images/game-of-life/drawCells-after-waterfall.png)
+[Снимок экрана: водопад после изменений в drawCells](./drawCells-after-waterfall.png)
 
-Breaking down a single frame, we see that the `fillStyle` cost is gone, and most
-of our frame's time is spent within `fillRect`, drawing each cell's rectangle.
+В разборе одного кадра стоимость `fillStyle` исчезла, большая часть времени уходит на `fillRect` — прямоугольники клеток.
 
-[![Screenshot of a flamegraph view of rendering a frame after the drawCells changes](../images/game-of-life/drawCells-after-flamegraph.png)](../images/game-of-life/drawCells-after-flamegraph.png)
+[Снимок экрана: flame graph после изменений в drawCells](./drawCells-after-flamegraph.png)
 
-## Making Time Run Faster
+## Больше тиков за кадр
 
-Some folks don't like waiting around, and would prefer if instead of one tick of
-the universe occurred per animation frame, nine ticks did. We can modify the
-`renderLoop` function in `wasm-game-of-life/www/index.js` to do this quite
-easily:
+Кому-то не хочется ждать: хочется не один тик вселенной за кадр анимации, а девять. Функцию `renderLoop` в `wasm-game-of-life/www/index.js` можно изменить так:
 
 ```js
 for (let i = 0; i < 9; i++) {
-  universe.tick();
+    universe.tick();
 }
 ```
 
-On my machine, this brings us back down to only 35 frames per second. No
-good. We want that buttery 60!
+На моей машине FPS снова падает примерно до 35 — плохо, хочется плавные 60.
 
-Now we know that time is being spent in `Universe::tick`, so let's add some
-`Timer`s to wrap various bits of it in `console.time` and `console.timeEnd`
-calls, and see where that leads us. My hypothesis is that allocating a new
-vector of cells and freeing the old vector on every tick is costly, and taking
-up a significant portion of our time budget.
+Теперь ясно, что время уходит в `Universe::tick`: добавим несколько `Timer` с вызовами `console.time` / `console.timeEnd` в разных местах и посмотрим. Гипотеза: выделение нового вектора клеток и освобождение старого на каждом тике дороги и съедают заметную долю бюджета.
 
 ```rust
 pub fn tick(&mut self) {
@@ -317,19 +263,15 @@ pub fn tick(&mut self) {
                 let live_neighbors = self.live_neighbor_count(row, col);
 
                 let next_cell = match (cell, live_neighbors) {
-                    // Rule 1: Any live cell with fewer than two live neighbours
-                    // dies, as if caused by underpopulation.
+                    // Правило 1: живая клетка с менее чем двумя соседями умирает (недонаселение).
                     (Cell::Alive, x) if x < 2 => Cell::Dead,
-                    // Rule 2: Any live cell with two or three live neighbours
-                    // lives on to the next generation.
+                    // Правило 2: живая клетка с двумя или тремя соседями выживает.
                     (Cell::Alive, 2) | (Cell::Alive, 3) => Cell::Alive,
-                    // Rule 3: Any live cell with more than three live
-                    // neighbours dies, as if by overpopulation.
+                    // Правило 3: живая клетка с более чем тремя соседями умирает (перенаселение).
                     (Cell::Alive, x) if x > 3 => Cell::Dead,
-                    // Rule 4: Any dead cell with exactly three live neighbours
-                    // becomes a live cell, as if by reproduction.
+                    // Правило 4: мёртвая клетка с ровно тремя соседями оживает.
                     (Cell::Dead, 3) => Cell::Alive,
-                    // All other cells remain in the same state.
+                    // Остальные клетки не меняются.
                     (otherwise, _) => otherwise,
                 };
 
@@ -343,23 +285,13 @@ pub fn tick(&mut self) {
 }
 ```
 
-Looking at the timings, it is clear that my hypothesis is incorrect: the vast
-majority of time is spent actually calculating the next generation of
-cells. Allocating and freeing a vector on every tick appears to have negligible
-cost, surprisingly. Another reminder to always guide our efforts with profiling!
+По замерам видно, что гипотеза неверна: подавляющее время уходит на вычисление следующего поколения клеток. Выделение и освобождение вектора на каждом тике, к удивлению, почти ничего не стоят. Ещё один повод всегда сверяться с профилем.
 
-[![Screenshot of a Universe::tick timer results](../images/game-of-life/console-time-in-universe-tick.png)](../images/game-of-life/console-time-in-universe-tick.png)
+[Снимок экрана: таймеры внутри Universe::tick](./console-time-in-universe-tick.png)
 
-The next section requires the `nightly` compiler. It's required because of
-the [test feature gate](https://doc.rust-lang.org/unstable-book/library-features/test.html)
-we're going to use for the benchmarks. Another tool we will install is [cargo benchcmp][benchcmp].
-It's a small utility for comparing micro-benchmarks produced by `cargo bench`.
+Для следующего фрагмента нужен компилятор `nightly` из‑за [встроенного бенчмарка](https://doc.rust-lang.org/unstable-book/library-features/test.html). Ещё понадобится утилита [cargo benchcmp](https://github.com/BurntSushi/cargo-benchcmp) — небольшой инструмент для сравнения микробенчмарков из `cargo bench`.
 
-[benchcmp]: https://github.com/BurntSushi/cargo-benchcmp
-
-Let's write a native code `#[bench]` doing the same thing that our WebAssembly
-is doing, but where we can use more mature profiling tools. Here is the new
-`wasm-game-of-life/benches/bench.rs`:
+Напишем нативный `#[bench]`, делающий то же, что и WebAssembly, но уже со зрелыми средствами профилирования. Новый файл `wasm-game-of-life/benches/bench.rs`:
 
 ```rust
 #![feature(test)]
@@ -377,13 +309,9 @@ fn universe_ticks(b: &mut test::Bencher) {
 }
 ```
 
-We also have to comment out all the `#[wasm_bindgen]` annotations, and the
-`"cdylib"` bits from `Cargo.toml` or else building native code will fail and
-have link errors.
+Также придётся закомментировать все аннотации `#[wasm_bindgen]` и секцию `"cdylib"` в `Cargo.toml`, иначе сборка нативного кода завершится ошибками линковки.
 
-With all that in place, we can run `cargo bench | tee before.txt` to compile and run our
-benchmark! The `| tee before.txt` part will take the output from `cargo bench` and put in a file
-called `before.txt`.
+После этого выполните `cargo bench | tee before.txt`, чтобы скомпилировать и прогнать бенчмарк. Часть `| tee before.txt` перенаправит вывод `cargo bench` в файл `before.txt`.
 
 ```
 $ cargo bench | tee before.txt
@@ -402,11 +330,7 @@ test universe_ticks ... bench:     664,421 ns/iter (+/- 51,926)
 test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
 ```
 
-This also tells us where the binary lives, and we can run the benchmarks again,
-but this time under our operating system's profiler. In my case, I'm running
-Linux, so [`perf`][perf] is the profiler I'll use:
-
-[perf]: https://perf.wiki.kernel.org/index.php/Main_Page
+Из вывода видно, где лежит бинарник; тот же бенчмарк можно запустить под профилировщиком ОС. У меня Linux, поэтому использую [`perf`](https://perf.wiki.kernel.org/index.php/Main_Page):
 
 ```
 $ perf record -g target/release/deps/bench-8474091a05cfa2d9 --bench
@@ -419,25 +343,17 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
 [ perf record: Captured and wrote 0.178 MB perf.data (2349 samples) ]
 ```
 
-Loading up the profile with `perf report` shows that all of our time is spent in
-`Universe::tick`, as expected:
+`perf report` показывает, что время, как и ожидалось, уходит в `Universe::tick`:
 
-[![Screenshot of perf report](../images/game-of-life/bench-perf-report.png)](../images/game-of-life/bench-perf-report.png)
+[Снимок экрана: отчёт perf](./bench-perf-report.png)
 
-`perf` will annotate which instructions in a function time is being spent at if
-you press `a`:
+В `perf` можно разметить инструкции по доле времени, нажав `a`:
 
-[![Screenshot of perf's instruction annotation](../images/game-of-life/bench-perf-annotate.png)](../images/game-of-life/bench-perf-annotate.png)
+[Снимок экрана: аннотация инструкций в perf](./bench-perf-annotate.png)
 
-This tells us that 26.67% of time is being spent summing neighboring cells'
-values, 23.41% of time is spent getting the neighbor's column index, and another
-15.42% of time is spent getting the neighbor's row index. Of these top three
-most expensive instructions, the second and third are both costly `div`
-instructions. These `div`s implement the modulo indexing logic in
-`Universe::live_neighbor_count`.
+Так видно, что 26,67% времени уходит на суммирование значений соседних клеток, 23,41% — на получение индекса столбца соседа и ещё 15,42% — на индекс строки. Среди трёх самых дорогих инструкций две последние — это `div`. Эти деления реализуют логику индексации по модулю в `Universe::live_neighbor_count`.
 
-Recall the `live_neighbor_count` definition inside
-`wasm-game-of-life/src/lib.rs`:
+Напомним определение `live_neighbor_count` в `wasm-game-of-life/src/lib.rs`:
 
 ```rust
 fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
@@ -458,14 +374,9 @@ fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
 }
 ```
 
-The reason we used modulo was to avoid cluttering up the code with `if` branches
-for the first or last row or column edge cases. But we are paying the cost of a
-`div` instruction even for the most common case, when neither `row` nor `column`
-is on the edge of the universe and they don't need the modulo wrapping
-treatment. Instead, if we use `if`s for the edge cases and unroll this loop, the
-branches *should* be very well-predicted by the CPU's branch predictor.
+Модulo выбрали, чтобы не засорять код ветвлениями для первой/последней строки и столбца. Но цена инструкции `div` платится и в самом частом случае, когда ни строка, ни столбец не на границе и «заворот» по модулю не нужен. Если для краёв использовать `if` и развернуть цикл, ветки _должны_ хорошо предсказываться блоком предсказания ветлений в CPU.
 
-Let's rewrite `live_neighbor_count` like this:
+Перепишем `live_neighbor_count` так:
 
 ```rust
 fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
@@ -523,7 +434,7 @@ fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
 }
 ```
 
-Now let's run the benchmarks again! This time output it to `after.txt`.
+Снова запустите бенчмарк, на этот раз сохранив вывод в `after.txt`.
 
 ```
 $ cargo bench | tee after.txt
@@ -543,7 +454,7 @@ test universe_ticks ... bench:      87,258 ns/iter (+/- 14,632)
 test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
 ```
 
-That looks a whole lot better! We can see just how much better it is with the `benchcmp` tool and the two text files we created before:
+Намного лучше! Насколько именно — покажет `benchcmp` и два сохранённых файла:
 
 ```
 $ cargo benchcmp before.txt after.txt
@@ -551,37 +462,20 @@ $ cargo benchcmp before.txt after.txt
  universe_ticks  664,421             87,258                 -577,163  -86.87%   x 7.61
 ```
 
-Wow! 7.61x speed up!
+Ускорение примерно в 7,61 раза.
 
-WebAssembly intentionally maps closely to common hardware architectures, but we
-do need to make sure that this native code speed up translates into a
-WebAssembly speed up as well.
+WebAssembly сознательно близок к распространённым архитектурам, но стоит убедиться, что выигрыш нативного кода переносится и на `.wasm`.
 
-Let's rebuild the `.wasm` with `wasm-pack build` and refresh
-[http://localhost:8080/](http://localhost:8080/). On my machine, the page is
-running at 60 frames per second again, and recording another profile with the
-browser's profiler reveals that each animation frame is taking about ten
-milliseconds.
+Пересоберите модуль командой `wasm-pack build` и обновите [http://localhost:8080/](http://localhost:8080/). У меня снова стабильные 60 FPS, а профиль браузера показывает около десяти миллисекунд на кадр.
 
-Success!
+Готово!
 
-[![Screenshot of a waterfall view of rendering a frame after replacing modulos with branches](../images/game-of-life/waterfall-after-branches-and-unrolling.png)](../images/game-of-life/waterfall-after-branches-and-unrolling.png)
+[Снимок экрана: водопад после замены modulo на ветвления](./waterfall-after-branches-and-unrolling.png)
 
-## Exercises
+## Упражнения
 
-* At this point, the next lowest hanging fruit for speeding up `Universe::tick`
-  is removing the allocation and free. Implement double buffering of cells,
-  where the `Universe` maintains two vectors, never frees either of them, and
-  never allocates new buffers in `tick`.
+-   Следующий очевидный шаг для ускорения `Universe::tick` — убрать выделение и освобождение памяти на каждом тике. Реализуйте двойную буферизацию: у `Universe` два вектора, ни один не освобождается, в `tick` новые буферы не выделяются.
 
-* Implement the alternative, delta-based design from the "Implementing Life"
-  chapter, where the Rust code returns a list of cells that changed states to
-  JavaScript. Does this make rendering to `<canvas>` faster? Can you implement
-  this design without allocating a new list of deltas on every tick?
+-   Реализуйте дельта-подход из главы «Реализация Life», когда Rust возвращает в JavaScript список изменившихся клеток. Ускоряет ли это отрисовку на `<canvas>`? Получится ли обойтись без нового списка дельт на каждом тике?
 
-* As our profiling has shown us, 2D `<canvas>` rendering is not particularly
-  fast. Replace the 2D canvas renderer with a [WebGL][webgl] renderer. How much faster is
-  the WebGL version? How large can you make the universe before WebGL rendering
-  is a bottleneck?
-
-[webgl]: https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
+-   Профилирование показало, что отрисовка на 2D `<canvas>` не самая быстрая. Замените рендер на [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API). Насколько быстрее вариант на WebGL? До какого размера вселенной узким местом остаётся именно WebGL?

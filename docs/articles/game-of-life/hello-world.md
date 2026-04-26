@@ -6,7 +6,7 @@ description: В этом разделе вы узнаете, как создат
 
 В этом разделе вы узнаете, как создать и запустить свою первую программу на Rust и WebAssembly: веб-страницу, оповещающую "Hello, World!".
 
-Перед началом работы убедитесь, что вы выполнили инструкции [setup instructions](setup.html).
+Перед началом работы убедитесь, что вы выполнили инструкции [setup instructions](./setup.md).
 
 ## Клонирование шаблона проекта
 
@@ -79,7 +79,7 @@ pub fn greet() {
 
 **`wasm-game-of-life/src/utils.rs`**
 
-Модуль `src/utils.rs` предоставляет общие утилиты для облегчения работы с Rust, скомпилированным в WebAssembly. Мы рассмотрим некоторые из этих утилит более подробно позже в учебнике, например, когда будем рассматривать [отладку нашего wasm-кода](debugging.html), но пока мы можем игнорировать этот файл.
+Модуль `src/utils.rs` предоставляет общие утилиты для облегчения работы с Rust, скомпилированным в WebAssembly. Мы рассмотрим некоторые из этих утилит более подробно позже в учебнике, например, когда будем рассматривать [отладку нашего wasm-кода](./debugging.md), но пока мы можем игнорировать этот файл.
 
 ## Сборка проекта
 
@@ -128,17 +128,15 @@ export function greet() {
 
 **`wasm-game-of-life/pkg/wasm_game_of_life.d.ts`**
 
-Файл `.d.ts` содержит объявления типов [TypeScript][typescript] для JavaScript-клея. Если вы используете TypeScript, вы можете проверять типы ваших вызовов функций WebAssembly, а ваша IDE может предоставить автозавершение и предложения! Если вы не используете TypeScript, можете смело игнорировать этот файл.
+Файл `.d.ts` содержит объявления типов [TypeScript](http://www.typescriptlang.org/) для JavaScript-клея. Если вы используете TypeScript, вы можете проверять типы ваших вызовов функций WebAssembly, а ваша IDE может предоставить автозавершение и предложения! Если вы не используете TypeScript, можете смело игнорировать этот файл.
 
 ```typescript
 export function greet(): void;
 ```
 
-[typescript]: http://www.typescriptlang.org/
-
 **`wasm-game-of-life/pkg/package.json`**
 
-[Файл `package.json` содержит метаданные о сгенерированном пакете JavaScript и WebAssembly.][package.json] Он используется npm и JavaScript bundlers для определения зависимостей между пакетами, имен пакетов, версий и множества других вещей. Он помогает нам интегрироваться с инструментами JavaScript и позволяет опубликовать наш пакет в npm.
+[Файл `package.json` содержит метаданные о сгенерированном пакете JavaScript и WebAssembly.](https://docs.npmjs.com/files/package.json) Он используется npm и JavaScript bundlers для определения зависимостей между пакетами, имен пакетов, версий и множества других вещей. Он помогает нам интегрироваться с инструментами JavaScript и позволяет опубликовать наш пакет в npm.
 
 ```json
 {
@@ -157,13 +155,9 @@ export function greet(): void;
 }
 ```
 
-[package.json]: https://docs.npmjs.com/files/package.json
-
 ## Вставка в веб-страницу
 
-Чтобы взять наш пакет `wasm-game-of-life` и использовать его в веб-странице, мы используем [шаблон проекта JavaScript `create-wasm-app`][create-wasm-app].
-
-[create-wasm-app]: https://github.com/rustwasm/create-wasm-app
+Чтобы взять наш пакет `wasm-game-of-life` и использовать его в веб-странице, мы используем [шаблон проекта JavaScript `create-wasm-app`](https://github.com/rustwasm/create-wasm-app).
 
 Выполните эту команду в директории `wasm-game-of-life`:
 

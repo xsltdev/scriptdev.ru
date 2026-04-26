@@ -39,6 +39,7 @@ theme:
         - navigation.top
         - navigation.footer
         - navigation.indexes
+        - navigation.path
         - content.action.edit
         - content.code.copy
     favicon: ts.svg
